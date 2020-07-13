@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<input
+			type="range"
+			name="hue"
+			id="hue"
+			value="0"
+			max="255"
+			oninput="report()"
+		/>
+	</body>
+	<script src="browserMqtt.js"></script>
+
+	<script>
+		var client = mqtt.connect("mqtt://localhost:1883"); // you add a ws:// url here
+
+		let range = document.getElementById("hue");
+
+		function report() {
+			client.publish("test/asd", range.value);
+		}
+		// var myHeaders = new Headers();
+		// myHeaders.append("Content-Type", "application/json");
+
+		// function report() {
+		// 	var raw = JSON.stringify({ bri: Number(range.value) });
+
+		// 	console.log(range.value);
+
+		// 	var requestOptions = {
+		// 		method: "PUT",
+		// 		headers: myHeaders,
+		// 		body: raw,
+		// 		redirect: "follow",
+		// 	};
+
+		// 	fetch(
+		// 		"http://192.168.0.20/api/vWOsvVaprpwthxcEnlbcxVjhU6deEL1JV7X8PnXj/lights/3/state",
+		// 		requestOptions
+		// 	)
+		// 		.then((response) => response.text())
+		// 		.then((result) => console.log(result))
+		// 		.catch((error) => console.log("error", error));
+		// }
+	</script>
+</html>
