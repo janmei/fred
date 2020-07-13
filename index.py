@@ -1,6 +1,10 @@
 import requests
-
 import paho.mqtt.client as mqtt
+import pygame
+
+pygame.init()
+
+sound = pygame.mixer.Sound("/Applications/XAMPP/xamppfiles/htdocs/fred/News-Sound.wav")
 
 def startRequest(bri):
     url = "http://192.168.0.20/api/vWOsvVaprpwthxcEnlbcxVjhU6deEL1JV7X8PnXj/lights/3/state"
@@ -27,8 +31,9 @@ def on_message(client, userdata, msg):
         startRequest(payload)
         print(msg.topic + " " + payload)
         pass
-    else:
+    elif payload == "sound":
         print("Not a Number")
+        sound.play()
         pass
 
 client = mqtt.Client()
