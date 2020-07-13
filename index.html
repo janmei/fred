@@ -15,16 +15,16 @@
 			oninput="report()"
 		/>
 	</body>
-	<script src="browserMqtt.js"></script>
-
+	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var client = mqtt.connect("mqtt://localhost:1883"); // you add a ws:// url here
-
-		let range = document.getElementById("hue");
+		var range = document.getElementById("hue");
+		var socket = io();
 
 		function report() {
-			client.publish("test/asd", range.value);
+			socket.emit("slider", range.value);
 		}
+	</script>
+	<script>
 		// var myHeaders = new Headers();
 		// myHeaders.append("Content-Type", "application/json");
 
