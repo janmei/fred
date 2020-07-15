@@ -5,16 +5,29 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		data: "test",
+		start: {
+			bri: null,
+			songId: null,
+		},
+		end: {
+			bri: null,
+			songId: null,
+		},
 	},
 	mutations: {
-		SET_DATA(state, msg) {
-			state.data = msg;
+		SET_START(state, msg) {
+			state.start = msg;
+		},
+		SET_END(state, msg) {
+			state.end = msg;
 		},
 	},
 	actions: {
-		someAction(context) {
-			context.commit("SET_DATA", "one more test");
+		updateStart(context, e) {
+			context.commit("SET_START", e);
+		},
+		updateEnd(context, e) {
+			context.commit("SET_END", e);
 		},
 	},
 	modules: {

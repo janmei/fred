@@ -31,6 +31,11 @@
 				/>
 			</div>
 			<input type="checkbox" v-on:click="this.setOn" />
+
+			<select>
+				<option>Start</option>
+				<option>Ende</option>
+			</select>
 		</section>
 	</div>
 </template>
