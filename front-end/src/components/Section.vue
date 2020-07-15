@@ -30,6 +30,7 @@
 					max="254"
 				/>
 			</div>
+			<input type="checkbox" v-on:click="this.setOn" />
 		</section>
 	</div>
 </template>
@@ -44,7 +45,7 @@ export default {
 	},
 	data: function() {
 		return {
-			on: true,
+			on: false,
 			hue: null,
 			sat: null,
 			bri: null,
@@ -56,25 +57,16 @@ export default {
 	methods: {
 		getJSON: function() {
 			let data;
-			if (this.color) {
-				data = {
-					section: this.id,
-					lamp: {
-						on: this.on,
-						hue: this.hue,
-						sat: this.sat,
-						bri: this.bri,
-					},
-				};
-			} else {
-				data = {
-					section: this.id,
-					lamp: {
-						on: this.on,
-						bri: this.bri,
-					},
-				};
-			}
+			data = {
+				section: this.id,
+				lamp: {
+					on: this.on,
+					hue: this.hue,
+					sat: this.sat,
+					bri: this.bri,
+				},
+			};
+
 			return data;
 		},
 		setHue: function(e) {
@@ -87,6 +79,10 @@ export default {
 		},
 		setBri: function(e) {
 			this.bri = Number(e.target.value);
+			this.report(this.getJSON());
+		},
+		setOn: function() {
+			this.on = !this.on;
 			this.report(this.getJSON());
 		},
 
