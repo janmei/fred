@@ -3,39 +3,21 @@
 		<section id="this.props.id">
 			{{ id }}
 			<div v-if="color">
-				<input
-					type="range"
-					name="hueinput"
-					v-on:input="this.setHue"
-					max="254"
-				/>
-				<input
-					type="range"
-					name="satinput"
-					v-on:input="this.setSat"
-					max="254"
-				/>
-				<input
-					type="range"
-					name="briinput"
-					v-on:input="this.setBri"
-					max="254"
-				/>
+				<input type="range" name="hueinput" v-model="hue" max="65535" />
+				<input type="range" name="satinput" v-model="sat" max="254" />
+				<input type="range" name="briinput" v-model="bri" max="254" />
 			</div>
 			<div v-else>
-				<input
-					type="range"
-					name="briinput"
-					v-on:input="this.setBri"
-					max="254"
-				/>
+				<input type="range" name="briinput" v-model="bri" max="254" />
 			</div>
-			<input type="checkbox" v-on:click="this.setOn" />
+			<input type="checkbox" v-model="on" />
 
-			<select>
-				<option>Start</option>
-				<option>Ende</option>
+			<select v-model="song">
+				<option value="1">Song 1</option>
+				<option value="2">Song 2</option>
+				<option value="3">Song 3</option>
 			</select>
+			<input type="range" name="volume" v-model="volume" max="100" />
 		</section>
 	</div>
 </template>
@@ -47,23 +29,13 @@ export default {
 		id: Number,
 		color: Boolean,
 		hueId: Number,
+		sectionId: String,
 	},
-	data: function() {
-		return {
-			on: false,
-			hue: null,
-			sat: null,
-			bri: null,
-			trackId: null,
-			wind: false,
-		};
-	},
-
 	methods: {
 		getJSON: function() {
 			let data;
 			data = {
-				section: this.id,
+				section: String(this.id),
 				lamp: {
 					on: this.on,
 					hue: this.hue,
@@ -74,26 +46,125 @@ export default {
 
 			return data;
 		},
-		setHue: function(e) {
-			this.hue = Number(e.target.value);
-			this.report(this.getJSON());
-		},
-		setSat: function(e) {
-			this.sat = Number(e.target.value);
-			this.report(this.getJSON());
-		},
-		setBri: function(e) {
-			this.bri = Number(e.target.value);
-			this.report(this.getJSON());
-		},
-		setOn: function() {
-			this.on = !this.on;
-			this.report(this.getJSON());
+		// hue: function(e) {
+		// 	this.hue = Number(e.target.value);
+		// 	this.report(this.getJSON());
+		// },
+		// sat: function(e) {
+		// 	this.sat = Number(e.target.value);
+		// 	this.report(this.getJSON());
+		// },
+
+		// on: function() {
+		// 	this.on = !this.on;
+		// 	this.report(this.getJSON());
+		// },
+		// volume: function(e) {
+		// 	this.volume = Number(e.target.value) / 100;
+
+		// 	let data = {
+		// 		section: this.id,
+		// 		volume: this.volume,
+		// 	};
+		// 	this.reportSound(data);
+		// },
+		reportSound: function(data) {
+			this.$socket.emit("volume", data);
+			console.log("fire");
 		},
 
 		report: function(data) {
 			this.$socket.emit("lamp", data);
-			console.log("fire");
+		},
+
+		// getState: function() {
+		// 	if (this.selected == "start") {
+		// 		let start = this.getStart();
+		// 		this.bri = start.bri;
+		// 		this.songId = start.songId;
+		// 	}
+		// 	if (this.selected == "end") {
+		// 		let end = this.getEnd();
+		// 		this.bri = end.bri;
+		// 		this.songId = end.songId;
+		// 	}
+		// },
+	},
+	computed: {
+		bri: {
+			get() {
+				this.report(this.$store.state[String(this.id)]);
+				return this.$store.state[String(this.id)].lamp.bri;
+			},
+			set(val) {
+				let data = {
+					section: String(this.id),
+					bri: Number(val),
+				};
+				this.$store.commit("SET_BRI", data);
+			},
+		},
+		hue: {
+			get() {
+				let data = this.$store.state[String(this.id)].lamp.hue;
+				return data;
+			},
+			set(val) {
+				let data = {
+					section: String(this.id),
+					hue: Number(val),
+				};
+				this.$store.commit("SET_HUE", data);
+			},
+		},
+
+		sat: {
+			get() {
+				return this.$store.state[String(this.id)].lamp.sat;
+			},
+			set(val) {
+				let data = {
+					section: String(this.id),
+					sat: Number(val),
+				};
+				this.$store.commit("SET_SAT", data);
+			},
+		},
+		on: {
+			get() {
+				return this.$store.state[String(this.id)].lamp.on;
+			},
+			set(val) {
+				let data = {
+					section: String(this.id),
+					on: val,
+				};
+				this.$store.commit("SET_ON", data);
+			},
+		},
+		song: {
+			get() {
+				return this.$store.state[String(this.id)].song.songId;
+			},
+			set(val) {
+				let data = {
+					section: String(this.id),
+					songId: Number(val),
+				};
+				this.$store.commit("SET_SONG", data);
+			},
+		},
+		volume: {
+			get() {
+				return this.$store.state[String(this.id)].song.volume;
+			},
+			set(val) {
+				let data = {
+					section: String(this.id),
+					volume: val,
+				};
+				this.$store.commit("SET_VOL", data);
+			},
 		},
 	},
 };

@@ -4,16 +4,32 @@ import pygame
 import os
 
 pygame.init()
+
+sound = pygame.mixer.Sound("/Applications/XAMPP/xamppfiles/htdocs/fred/music.wav")
 device_id = os.getenv('SECTION_ID')
 
 mqtt_topic = "section/%s/#" % device_id
-
 print(mqtt_topic)
-sound = pygame.mixer.Sound("/Applications/XAMPP/xamppfiles/htdocs/fred/News-Sound.wav")
+
+
+if device_id == '1':
+    lightid = 3
+    pass
+if device_id == '2':
+    lightid = 18
+    pass
+if device_id == '3':
+    lightid = 19
+    pass
+
+if device_id == '4':
+    lightid = 20
+    pass
+
 
 def startRequest(data):
-    url = "http://192.168.0.20/api/vWOsvVaprpwthxcEnlbcxVjhU6deEL1JV7X8PnXj/lights/3/state"
 
+    url = "http://192.168.0.20/api/vWOsvVaprpwthxcEnlbcxVjhU6deEL1JV7X8PnXj/lights/" + str(lightid) + "/state"
     payload = data
     headers = {
     'Content-Type': 'application/json'
@@ -32,15 +48,16 @@ def on_message(client, userdata, msg):
     topic = msg.topic
     payload = str(msg.payload, "utf-8")
     print(payload)
-    print(topic)
+    # print(topic)
     if topic == "section/" + device_id + "/lamp":
-        print("Number")
         startRequest(payload)
         print(msg.topic + " " + payload)
         pass
     elif topic == "section/"+ device_id + "/sound":
-        print("Not a Number")
         sound.play()
+        pass
+    elif topic == "section/" + device_id + "/volume":
+        sound.set_volume(float(payload))
         pass
 
 client = mqtt.Client()

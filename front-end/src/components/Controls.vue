@@ -7,12 +7,17 @@
 				type="range"
 				name="brightnessStart"
 				id=""
-				v-on:click="this.updateBri"
+				v-on:input="this.setBri"
 			/>
 		</div>
 		<div class="varItem">
 			<label for="musicStart">Song</label>
-			<select name="musicStart" id="" v-on:change="this.updateSong">
+			<select
+				name="musicStart"
+				id=""
+				v-on:change="this.update"
+				v-model="selected"
+			>
 				<option value="1">Song 1</option>
 				<option value="2">Song 2</option>
 				<option value="3">Song 3</option>
@@ -27,21 +32,30 @@ export default {
 	props: {
 		name: String,
 	},
+	data: function() {
+		return {
+			selected: "",
+			bri: null,
+		};
+	},
 
 	methods: {
-		updateBri: function(e) {
+		update: function() {
 			if (this.name === "Start") {
-				this.$store.dispatch("updateStart", { bri: Number(e.target.value) });
+				this.$store.dispatch("updateStart", {
+					bri: this.bri,
+					songId: this.selected,
+				});
 			} else if (this.name === "Ende") {
-				this.$store.dispatch("updateEnd", { bri: Number(e.target.value) });
+				this.$store.dispatch("updateEnd", {
+					bri: this.bri,
+					songId: this.selected,
+				});
 			}
 		},
-		updateSong: function(e) {
-			if (this.name === "Start") {
-				this.$store.dispatch("updateStart", { songId: Number(e.target.value) });
-			} else if (this.name === "Ende") {
-				this.$store.dispatch("updateEnd", { songId: Number(e.target.value) });
-			}
+
+		setBri: function(e) {
+			this.bri = Number(e.target.value);
 		},
 	},
 };
