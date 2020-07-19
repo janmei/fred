@@ -5,9 +5,10 @@ import os
 import pathlib
 
 pygame.mixer.init()
-path = str(pathlib.Path().parent.absolute())
+path = str(os.path.abspath('music.ogg'))
+print(path)
 
-sound = pygame.mixer.Sound(path +"/music.ogg")
+sound = pygame.mixer.Sound(path)
 device_id = os.getenv('SECTION_ID')
 
 mqtt_topic = "section/%s/#" % device_id
