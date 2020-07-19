@@ -1,6 +1,6 @@
 <template>
 	<div class="varStart varControls">
-		<h3>{{ name }}</h3>
+		<h3>{{ scene.id }}</h3>
 		<div class="varItem">
 			<label for="brightnessStart">Helligkeit</label>
 			<input
@@ -30,7 +30,7 @@
 export default {
 	name: "Controls",
 	props: {
-		name: String,
+		scene: Object,
 	},
 	data: function() {
 		return {

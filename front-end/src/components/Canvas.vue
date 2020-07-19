@@ -8,6 +8,8 @@
 		</div>
 
 		<sidebar-vue />
+
+		<button @click="this.saveScene">Click</button>
 	</div>
 </template>
 
@@ -22,7 +24,11 @@ export default {
 	},
 	props: {},
 
-	methods: {},
+	methods: {
+		saveScene: function() {
+			this.$store.dispatch("saveScene");
+		},
+	},
 };
 </script>
 

@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
 	socket.on("song", (msg) => {
 		console.log(msg);
 		client.publish(
-			"section/" + Number(msg.section) + "/song",
+			"section/" + msg.section + "/song",
 			JSON.stringify(msg.songId)
 		);
 	});
@@ -65,8 +65,8 @@ io.on("connection", (socket) => {
 	socket.on("volume", (msg) => {
 		console.log(msg);
 		client.publish(
-			"section/" + Number(msg.section) + "/volume",
-			JSON.stringify(msg.volume)
+			"section/" + msg.section + "/volume",
+			String(msg.song.volume)
 		);
 	});
 });

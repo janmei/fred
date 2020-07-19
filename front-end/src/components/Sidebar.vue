@@ -1,8 +1,10 @@
 <template>
 	<div class="variables">
 		<h2>Variables</h2>
-		<controls-vue name="Start" />
-		<controls-vue name="Ende" />
+
+		<div v-for="scene in this.getScenes" v-bind:key="scene.id">
+			<controls-vue v-bind:scene="scene" />
+		</div>
 	</div>
 </template>
 
@@ -11,10 +13,16 @@ import ControlsVue from "./Controls.vue";
 export default {
 	name: "Sidebar",
 	props: {},
+
 	components: {
 		ControlsVue,
 	},
 	methods: {},
+	computed: {
+		getScenes() {
+			return this.$store.getters.scenes;
+		},
+	},
 };
 </script>
 

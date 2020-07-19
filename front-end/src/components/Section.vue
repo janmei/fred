@@ -46,54 +46,24 @@ export default {
 
 			return data;
 		},
-		// hue: function(e) {
-		// 	this.hue = Number(e.target.value);
-		// 	this.report(this.getJSON());
-		// },
-		// sat: function(e) {
-		// 	this.sat = Number(e.target.value);
-		// 	this.report(this.getJSON());
-		// },
 
-		// on: function() {
-		// 	this.on = !this.on;
-		// 	this.report(this.getJSON());
-		// },
-		// volume: function(e) {
-		// 	this.volume = Number(e.target.value) / 100;
-
-		// 	let data = {
-		// 		section: this.id,
-		// 		volume: this.volume,
-		// 	};
-		// 	this.reportSound(data);
-		// },
-		reportSound: function(data) {
+		reportVol: function(data) {
 			this.$socket.emit("volume", data);
+			console.log("fire");
+		},
+
+		reportSound: function(data) {
+			this.$socket.emit("sound", data);
 			console.log("fire");
 		},
 
 		report: function(data) {
 			this.$socket.emit("lamp", data);
 		},
-
-		// getState: function() {
-		// 	if (this.selected == "start") {
-		// 		let start = this.getStart();
-		// 		this.bri = start.bri;
-		// 		this.songId = start.songId;
-		// 	}
-		// 	if (this.selected == "end") {
-		// 		let end = this.getEnd();
-		// 		this.bri = end.bri;
-		// 		this.songId = end.songId;
-		// 	}
-		// },
 	},
 	computed: {
 		bri: {
 			get() {
-				this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.bri;
 			},
 			set(val) {
@@ -102,6 +72,7 @@ export default {
 					bri: Number(val),
 				};
 				this.$store.commit("SET_BRI", data);
+				this.report(this.$store.state[String(this.id)]);
 			},
 		},
 		hue: {
@@ -115,6 +86,7 @@ export default {
 					hue: Number(val),
 				};
 				this.$store.commit("SET_HUE", data);
+				this.report(this.$store.state[String(this.id)]);
 			},
 		},
 
@@ -128,6 +100,7 @@ export default {
 					sat: Number(val),
 				};
 				this.$store.commit("SET_SAT", data);
+				this.report(this.$store.state[String(this.id)]);
 			},
 		},
 		on: {
@@ -140,6 +113,7 @@ export default {
 					on: val,
 				};
 				this.$store.commit("SET_ON", data);
+				this.report(this.$store.state[String(this.id)]);
 			},
 		},
 		song: {
@@ -164,6 +138,7 @@ export default {
 					volume: val,
 				};
 				this.$store.commit("SET_VOL", data);
+				this.reportVol(this.$store.state[String(this.id)]);
 			},
 		},
 	},

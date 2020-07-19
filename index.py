@@ -5,7 +5,7 @@ import os
 
 pygame.init()
 
-sound = pygame.mixer.Sound("/Applications/XAMPP/xamppfiles/htdocs/fred/music.wav")
+sound = pygame.mixer.Sound("music.wav")
 device_id = os.getenv('SECTION_ID')
 
 mqtt_topic = "section/%s/#" % device_id
@@ -53,11 +53,12 @@ def on_message(client, userdata, msg):
         startRequest(payload)
         print(msg.topic + " " + payload)
         pass
-    elif topic == "section/"+ device_id + "/sound":
+    if topic == "section/"+ device_id + "/sound":
         sound.play()
         pass
-    elif topic == "section/" + device_id + "/volume":
+    if topic == "section/" + device_id + "/volume":
         sound.set_volume(float(payload))
+        print(payload)
         pass
 
 client = mqtt.Client()
