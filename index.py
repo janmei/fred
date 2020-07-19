@@ -5,7 +5,7 @@ import os
 
 pygame.init()
 
-sound = pygame.mixer.Sound("music.wav")
+sound = pygame.mixer.Sound("./music.wav")
 device_id = os.getenv('SECTION_ID')
 
 mqtt_topic = "section/%s/#" % device_id
