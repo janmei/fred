@@ -2,10 +2,12 @@ import requests
 import paho.mqtt.client as mqtt
 import pygame
 import os
+import pathlib
 
 pygame.init()
-
-sound = pygame.mixer.Sound("./music.wav")
+path = str(pathlib.Path().parent.absolute())
+print(path)
+sound = pygame.mixer.Sound(path +"/music.wav")
 device_id = os.getenv('SECTION_ID')
 
 mqtt_topic = "section/%s/#" % device_id
