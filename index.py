@@ -4,10 +4,10 @@ import pygame
 import os
 import pathlib
 
-pygame.init()
+pygame.mixer.init()
 path = str(pathlib.Path().parent.absolute())
-print(path)
-sound = pygame.mixer.Sound(path +"/music.wav")
+
+sound = pygame.mixer.Sound(path +"/music.ogg")
 device_id = os.getenv('SECTION_ID')
 
 mqtt_topic = "section/%s/#" % device_id
