@@ -5,7 +5,7 @@ import os
 import pathlib
 
 pygame.mixer.init()
-path = str(os.path.abspath('music.ogg'))
+path = '/home/pi/fred/music.ogg'
 print(path)
 
 sound = pygame.mixer.Sound(path)
