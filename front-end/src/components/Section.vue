@@ -32,21 +32,6 @@ export default {
 		sectionId: String,
 	},
 	methods: {
-		getJSON: function() {
-			let data;
-			data = {
-				section: String(this.id),
-				lamp: {
-					on: this.on,
-					hue: this.hue,
-					sat: this.sat,
-					bri: this.bri,
-				},
-			};
-
-			return data;
-		},
-
 		reportVol: function(data) {
 			this.$socket.emit("volume", data);
 			console.log("fire");
@@ -64,6 +49,7 @@ export default {
 	computed: {
 		bri: {
 			get() {
+				this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.bri;
 			},
 			set(val) {
@@ -77,6 +63,7 @@ export default {
 		},
 		hue: {
 			get() {
+				this.report(this.$store.state[String(this.id)]);
 				let data = this.$store.state[String(this.id)].lamp.hue;
 				return data;
 			},
@@ -92,6 +79,7 @@ export default {
 
 		sat: {
 			get() {
+				this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.sat;
 			},
 			set(val) {
@@ -105,6 +93,7 @@ export default {
 		},
 		on: {
 			get() {
+				this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.on;
 			},
 			set(val) {
@@ -130,6 +119,7 @@ export default {
 		},
 		volume: {
 			get() {
+				this.reportVol(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].song.volume;
 			},
 			set(val) {

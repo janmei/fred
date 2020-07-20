@@ -73,6 +73,15 @@ export default new Vuex.Store({
 		scenes: [],
 	},
 	mutations: {
+		initialiseStore(state) {
+			// Check if the ID exists
+			if (localStorage.getItem("store")) {
+				// Replace the state object with the stored item
+				this.replaceState(
+					Object.assign(state, JSON.parse(localStorage.getItem("store")))
+				);
+			}
+		},
 		SET_BRI(state, msg) {
 			state[msg.section].lamp.bri = msg.bri;
 		},
@@ -91,9 +100,10 @@ export default new Vuex.Store({
 		SET_VOL(state, msg) {
 			state[msg.section].song.volume = msg.volume;
 		},
-		SAVE_SCENE(state) {
+		SAVE_SCENE(state, msg) {
 			let json;
 			json = {
+				name: msg,
 				id: this.state.scenes.length + 1,
 				states: [
 					{ ...state["1"] },
@@ -105,13 +115,22 @@ export default new Vuex.Store({
 			let newObj = JSON.parse(JSON.stringify(json));
 			state.scenes.push(newObj);
 		},
+		SET_SCENE(state, msg) {
+			state[1] = msg.states[0];
+			state[2] = msg.states[1];
+			state[3] = msg.states[2];
+			state[4] = msg.states[3];
+		},
 	},
 	getters: {
 		scenes: (state) => state.scenes,
 	},
 	actions: {
-		saveScene(context) {
-			context.commit("SAVE_SCENE");
+		saveScene(context, data) {
+			context.commit("SAVE_SCENE", data);
+		},
+		setScene(context, data) {
+			context.commit("SET_SCENE", data);
 		},
 	},
 	modules: {

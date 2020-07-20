@@ -5,11 +5,13 @@
 			<section-vue v-bind:id="2" v-bind:color="true" />
 			<section-vue v-bind:id="3" v-bind:color="true" />
 			<section-vue v-bind:id="4" />
+			<div class="save">
+				<input type="text" v-model="sceneName" />
+				<button @click="this.saveScene" class="saveScene">Click</button>
+			</div>
 		</div>
 
 		<sidebar-vue />
-
-		<button @click="this.saveScene">Click</button>
 	</div>
 </template>
 
@@ -22,11 +24,18 @@ export default {
 		SidebarVue,
 		SectionVue,
 	},
+	data: function() {
+		return {
+			sceneName: "",
+		};
+	},
 	props: {},
+	computed: {},
 
 	methods: {
 		saveScene: function() {
-			this.$store.dispatch("saveScene");
+			this.$store.dispatch("saveScene", this.sceneName);
+			this.sceneName = "";
 		},
 	},
 };
@@ -54,6 +63,16 @@ export default {
 		background-color: hsl(29, 100%, 90%);
 		box-shadow: 0 12px 25px #0000003f;
 		border-radius: 32px;
+	}
+	.save {
+		width: fit-content;
+		height: 60px;
+		box-shadow: 0 12px 25px #0000003f;
+		padding: 16px;
+		.saveScene {
+			width: 60px;
+			height: 20px;
+		}
 	}
 }
 </style>

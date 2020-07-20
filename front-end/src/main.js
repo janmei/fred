@@ -17,7 +17,17 @@ Vue.use(
 		},
 	})
 );
+
+// Subscribe to store updates
+store.subscribe((mutation, state) => {
+	// Store the state object as a JSON string
+	localStorage.setItem("store", JSON.stringify(state));
+});
+
 new Vue({
 	store,
+	beforeCreate() {
+		this.$store.commit("initialiseStore");
+	},
 	render: (h) => h(App),
 }).$mount("#app");
