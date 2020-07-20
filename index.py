@@ -3,6 +3,9 @@ import paho.mqtt.client as mqtt
 import pygame
 import os
 import pathlib
+import socket
+
+print(socket.gethostname())
 
 pygame.mixer.init()
 path = '/home/pi/fred/music.ogg'
