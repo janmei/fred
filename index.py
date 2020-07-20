@@ -5,14 +5,12 @@ import os
 import pathlib
 import socket
 
-print(socket.gethostname())
-
 pygame.mixer.init()
 path = '/home/pi/fred/music.ogg'
 print(path)
 
 sound = pygame.mixer.Sound(path)
-device_id = os.getenv('SECTION_ID')
+device_id = socket.gethostname()
 
 mqtt_topic = "section/%s/#" % device_id
 print(mqtt_topic)
