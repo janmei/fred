@@ -1,6 +1,6 @@
 <template>
 	<div class="variables">
-		<h2>Variables</h2>
+		<h2>Szenen</h2>
 
 		<div v-for="scene in this.getScenes" v-bind:key="scene.id">
 			<controls-vue v-bind:scene="scene" />

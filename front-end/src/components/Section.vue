@@ -1,11 +1,17 @@
 <template>
 	<div class="">
-		<section id="this.props.id">
+		<section>
 			{{ id }}
 			<div v-if="color">
 				<input type="range" name="hueinput" v-model="hue" max="65535" />
 				<input type="range" name="satinput" v-model="sat" max="254" />
 				<input type="range" name="briinput" v-model="bri" max="254" />
+				<ColorPicker
+					@changed="updateColor"
+					:h="Math.floor((this.hue / 65535) * 360)"
+					:s="this.sat"
+					:b="this.bri"
+				/>
 			</div>
 			<div v-else>
 				<input type="range" name="briinput" v-model="bri" max="254" />
@@ -23,8 +29,14 @@
 </template>
 
 <script>
+import ColorPicker from "./ColorWheel";
+
 export default {
 	name: "Section",
+	components: {
+		ColorPicker,
+	},
+
 	props: {
 		id: Number,
 		color: Boolean,
@@ -44,6 +56,20 @@ export default {
 
 		report: function(data) {
 			this.$socket.emit("lamp", data);
+		},
+		updateColor: function(data) {
+			console.log(data);
+			this.hue = this.calcHue(data.h);
+			this.sat = this.calc254(data.s);
+			this.bri = data.b;
+		},
+		calcHue: function(hue) {
+			let val = Math.floor((hue / 360) * 65535);
+			return val;
+		},
+		calc254: function(data) {
+			let val = Math.floor((data / 100) * 254);
+			return val;
 		},
 	},
 	computed: {
@@ -140,7 +166,7 @@ export default {
 section {
 	width: 100%;
 	height: 100%;
-	background-color: hsl(29, 100%, 90%);
+	background-color: #ffe5cc;
 	box-shadow: 0 12px 25px #0000003f;
 	border-radius: 32px;
 }
