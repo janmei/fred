@@ -6,12 +6,12 @@
 				<input type="range" name="hueinput" v-model="hue" max="65535" />
 				<input type="range" name="satinput" v-model="sat" max="254" />
 				<input type="range" name="briinput" v-model="bri" max="254" />
-				<ColorPicker
+				<!-- <ColorPicker
 					@changed="updateColor"
 					:h="Math.floor((this.hue / 65535) * 360)"
 					:s="this.sat"
 					:b="this.bri"
-				/>
+				/> -->
 			</div>
 			<div v-else>
 				<input type="range" name="briinput" v-model="bri" max="254" />
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import ColorPicker from "./ColorWheel";
+// import ColorPicker from "./ColorWheel";
 
 export default {
 	name: "Section",
 	components: {
-		ColorPicker,
+		// ColorPicker,
 	},
 
 	props: {
@@ -81,7 +81,9 @@ export default {
 			set(val) {
 				let data = {
 					section: String(this.id),
-					bri: Number(val),
+					lamp: {
+						bri: Number(val),
+					},
 				};
 				this.$store.commit("SET_BRI", data);
 				this.report(this.$store.state[String(this.id)]);
@@ -96,8 +98,11 @@ export default {
 			set(val) {
 				let data = {
 					section: String(this.id),
-					hue: Number(val),
+					lamp: {
+						hue: Number(val),
+					},
 				};
+				console.log(data);
 				this.$store.commit("SET_HUE", data);
 				this.report(this.$store.state[String(this.id)]);
 			},
@@ -111,7 +116,9 @@ export default {
 			set(val) {
 				let data = {
 					section: String(this.id),
-					sat: Number(val),
+					lamp: {
+						sat: Number(val),
+					},
 				};
 				this.$store.commit("SET_SAT", data);
 				this.report(this.$store.state[String(this.id)]);
@@ -125,7 +132,9 @@ export default {
 			set(val) {
 				let data = {
 					section: String(this.id),
-					on: val,
+					lamp: {
+						on: val,
+					},
 				};
 				this.$store.commit("SET_ON", data);
 				this.report(this.$store.state[String(this.id)]);
@@ -138,7 +147,9 @@ export default {
 			set(val) {
 				let data = {
 					section: String(this.id),
-					songId: Number(val),
+					somg: {
+						songId: Number(val),
+					},
 				};
 				this.$store.commit("SET_SONG", data);
 			},
@@ -151,7 +162,9 @@ export default {
 			set(val) {
 				let data = {
 					section: String(this.id),
-					volume: val,
+					somg: {
+						volume: val,
+					},
 				};
 				this.$store.commit("SET_VOL", data);
 				this.reportVol(this.$store.state[String(this.id)]);

@@ -20,7 +20,7 @@ export default {
 	methods: {},
 	computed: {
 		getScenes() {
-			return this.$store.getters.scenes;
+			return this.$store.state.scenes;
 		},
 	},
 };

@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
+// import _ from "lodash";
 Vue.use(Vuex);
+// let scenes = [];
 
 export default new Vuex.Store({
 	state: {
@@ -69,7 +70,6 @@ export default new Vuex.Store({
 
 			selected: "",
 		},
-
 		scenes: [],
 	},
 	mutations: {
@@ -83,25 +83,27 @@ export default new Vuex.Store({
 			}
 		},
 		SET_BRI(state, msg) {
-			state[msg.section].lamp.bri = msg.bri;
+			state[msg.section].lamp.bri = msg.lamp.bri;
 		},
 		SET_HUE(state, msg) {
-			state[msg.section].lamp.hue = msg.hue;
+			state[msg.section].lamp.hue = msg.lamp.hue;
 		},
 		SET_SAT(state, msg) {
-			state[msg.section].lamp.sat = msg.sat;
+			state[msg.section].lamp.sat = msg.lamp.sat;
 		},
 		SET_ON(state, msg) {
-			state[msg.section].lamp.on = msg.on;
+			state[msg.section].lamp.on = msg.lamp.on;
 		},
 		SET_SONG(state, msg) {
-			state[msg.section].song.songId = msg.songId;
+			state[msg.section].song.songId = msg.song.songId;
 		},
 		SET_VOL(state, msg) {
-			state[msg.section].song.volume = msg.volume;
+			state[msg.section].song.volume = msg.song.volume;
 		},
 		SAVE_SCENE(state, msg) {
 			let json;
+			// let state1 = _.clone(state["1"]);
+			// let state2 = _.cloneDeep(state["2"]);
 			json = {
 				name: msg,
 				id: this.state.scenes.length + 1,
@@ -115,22 +117,33 @@ export default new Vuex.Store({
 			let newObj = JSON.parse(JSON.stringify(json));
 			state.scenes.push(newObj);
 		},
-		SET_SCENE(state, msg) {
-			state[1] = msg.states[0];
-			state[2] = msg.states[1];
-			state[3] = msg.states[2];
-			state[4] = msg.states[3];
-		},
+		// SET_SCENE(state, msg) {
+		// 	// this.replaceState({ ...state, msg });
+		// 	// console.log(msg.states[1]);
+		// 	// state[1] = msg.states[0];
+		// 	// state[2] = msg.states[1];
+		// 	// state[3] = msg.states[2];
+		// 	// state[4] = msg.states[3];
+		// },
 	},
 	getters: {
-		scenes: (state) => state.scenes,
+		scenes: (state) => {
+			return JSON.parse(JSON.stringify(state.scenes));
+		},
 	},
 	actions: {
 		saveScene(context, data) {
 			context.commit("SAVE_SCENE", data);
 		},
 		setScene(context, data) {
-			context.commit("SET_SCENE", data);
+			// context.commit("SET_SCENE", data);
+			console.log(data.states);
+			for (var status in data.states) {
+				context.commit("SET_HUE", data.states[status]);
+				context.commit("SET_SAT", data.states[status]);
+				context.commit("SET_BRI", data.states[status]);
+				context.commit("SET_ON", data.states[status]);
+			}
 		},
 	},
 	modules: {

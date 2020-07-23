@@ -10,6 +10,7 @@
   "dependencies": {
     "@jaames/iro": "^5.1.8",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.19",
     "vue": "^2.6.11",
     "vue-color": "^2.7.1",
     "vue-iro-color-picker": "^2.0.0",

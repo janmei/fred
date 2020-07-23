@@ -11,31 +11,8 @@ export default {
 	props: {
 		scene: Object,
 	},
-	data: function() {
-		return {
-			selected: "",
-			bri: null,
-		};
-	},
 
 	methods: {
-		update: function() {
-			if (this.name === "Start") {
-				this.$store.dispatch("updateStart", {
-					bri: this.bri,
-					songId: this.selected,
-				});
-			} else if (this.name === "Ende") {
-				this.$store.dispatch("updateEnd", {
-					bri: this.bri,
-					songId: this.selected,
-				});
-			}
-		},
-
-		setBri: function(e) {
-			this.bri = Number(e.target.value);
-		},
 		setScene: function() {
 			this.$store.dispatch("setScene", this.scene);
 		},
