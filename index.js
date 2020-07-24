@@ -50,8 +50,25 @@ io.on("connection", (socket) => {
 		console.log(msg);
 		client.publish(
 			"section/" + msg.section + "/song",
-			JSON.stringify(msg.songId)
+			JSON.stringify(msg.song.songId)
 		);
+	});
+
+	/**
+	 * Socket Message Structure
+	 * PLAY
+	 * {
+	 * 	section: Number,
+	 *	songId: Number
+	 * }
+	 */
+	socket.on("play", (msg) => {
+		console.log(msg);
+		client.publish("section/" + msg.section + "/song/play", String(msg.songId));
+	});
+
+	socket.on("pause", (msg) => {
+		client.publish("section/" + msg + "/song/pause", "true");
 	});
 
 	/**
@@ -65,7 +82,7 @@ io.on("connection", (socket) => {
 	socket.on("volume", (msg) => {
 		console.log(msg);
 		client.publish(
-			"section/" + msg.section + "/volume",
+			"section/" + msg.section + "/song/volume",
 			String(msg.song.volume)
 		);
 	});

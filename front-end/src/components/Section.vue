@@ -1,40 +1,62 @@
 <template>
 	<div class="">
 		<section>
-			{{ id }}
-			<div v-if="color">
-				<input type="range" name="hueinput" v-model="hue" max="65535" />
-				<input type="range" name="satinput" v-model="sat" max="254" />
-				<input type="range" name="briinput" v-model="bri" max="254" />
-				<!-- <ColorPicker
-					@changed="updateColor"
-					:h="Math.floor((this.hue / 65535) * 360)"
-					:s="this.sat"
-					:b="this.bri"
-				/> -->
+			<div v-if="!empty">
+				<b class="section_id">
+					{{ id }}
+				</b>
+				<div v-if="color" class="color">
+					<div class="wheel">
+						<ColorPicker @changed="updateColor" />
+					</div>
+					<div class="ranges">
+						<div>
+							<label for="on">Power</label>
+							<input type="checkbox" v-model="on" name="on" />
+						</div>
+						<label for="hueinput">Hue</label>
+						<input type="range" name="hueinput" v-model="hue" max="65535" />
+						<label for="satinput">Sat</label>
+						<input type="range" name="satinput" v-model="sat" max="254" />
+						<label for="Briinput">Bri {{ this.bri }}</label>
+						<input type="range" name="briinput" v-model="bri" max="254" />
+					</div>
+				</div>
+				<div v-else>
+					<input type="range" name="briinput" v-model="bri" max="254" />
+				</div>
+
+				<div class="music">
+					<select v-model="song" @change="reportSound">
+						<option value="1">Song 1</option>
+						<option value="2">Song 2</option>
+						<option value="3">Song 3</option>
+					</select>
+					<button @click="this.playSong">Play</button>
+					<button @click="this.pauseSong">Pause</button>
+					<input
+						type="range"
+						name="volume"
+						v-model="volume"
+						max="100"
+						@input="reportVol"
+					/>
+				</div>
 			</div>
 			<div v-else>
-				<input type="range" name="briinput" v-model="bri" max="254" />
+				<!-- EMPTY STATE-->
 			</div>
-			<input type="checkbox" v-model="on" />
-
-			<select v-model="song">
-				<option value="1">Song 1</option>
-				<option value="2">Song 2</option>
-				<option value="3">Song 3</option>
-			</select>
-			<input type="range" name="volume" v-model="volume" max="100" />
 		</section>
 	</div>
 </template>
 
 <script>
-// import ColorPicker from "./ColorWheel";
+import ColorPicker from "./ColorWheel";
 
 export default {
 	name: "Section",
 	components: {
-		// ColorPicker,
+		ColorPicker,
 	},
 
 	props: {
@@ -42,26 +64,27 @@ export default {
 		color: Boolean,
 		hueId: Number,
 		sectionId: String,
+		empty: Boolean,
 	},
 	methods: {
-		reportVol: function(data) {
+		reportVol: function() {
+			let data = this.$store.state[String(this.id)];
 			this.$socket.emit("volume", data);
-			console.log("fire");
 		},
 
-		reportSound: function(data) {
-			this.$socket.emit("sound", data);
-			console.log("fire");
+		reportSound: function() {
+			let data = this.$store.state[String(this.id)];
+			this.$socket.emit("song", data);
 		},
 
 		report: function(data) {
 			this.$socket.emit("lamp", data);
 		},
 		updateColor: function(data) {
-			console.log(data);
 			this.hue = this.calcHue(data.h);
 			this.sat = this.calc254(data.s);
 			this.bri = data.b;
+			this.report(this.$store.state[String(this.id)]);
 		},
 		calcHue: function(hue) {
 			let val = Math.floor((hue / 360) * 65535);
@@ -71,11 +94,17 @@ export default {
 			let val = Math.floor((data / 100) * 254);
 			return val;
 		},
+		playSong: function() {
+			this.$store.commit("PLAY_SONG", this.id);
+		},
+		pauseSong: function() {
+			this.$store.commit("PAUSE_SONG", this.id);
+		},
 	},
 	computed: {
 		bri: {
 			get() {
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.bri;
 			},
 			set(val) {
@@ -86,12 +115,12 @@ export default {
 					},
 				};
 				this.$store.commit("SET_BRI", data);
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 			},
 		},
 		hue: {
 			get() {
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 				let data = this.$store.state[String(this.id)].lamp.hue;
 				return data;
 			},
@@ -102,15 +131,14 @@ export default {
 						hue: Number(val),
 					},
 				};
-				console.log(data);
 				this.$store.commit("SET_HUE", data);
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 			},
 		},
 
 		sat: {
 			get() {
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.sat;
 			},
 			set(val) {
@@ -121,12 +149,12 @@ export default {
 					},
 				};
 				this.$store.commit("SET_SAT", data);
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 			},
 		},
 		on: {
 			get() {
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.on;
 			},
 			set(val) {
@@ -137,17 +165,18 @@ export default {
 					},
 				};
 				this.$store.commit("SET_ON", data);
-				this.report(this.$store.state[String(this.id)]);
+				// this.report(this.$store.state[String(this.id)]);
 			},
 		},
 		song: {
 			get() {
+				// this.reportSound(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].song.songId;
 			},
 			set(val) {
 				let data = {
 					section: String(this.id),
-					somg: {
+					song: {
 						songId: Number(val),
 					},
 				};
@@ -156,18 +185,17 @@ export default {
 		},
 		volume: {
 			get() {
-				this.reportVol(this.$store.state[String(this.id)]);
+				// this.reportVol(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].song.volume;
 			},
 			set(val) {
 				let data = {
 					section: String(this.id),
-					somg: {
+					song: {
 						volume: val,
 					},
 				};
 				this.$store.commit("SET_VOL", data);
-				this.reportVol(this.$store.state[String(this.id)]);
 			},
 		},
 	},
@@ -177,10 +205,28 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 section {
-	width: 100%;
-	height: 100%;
-	background-color: #ffe5cc;
+	width: auto;
+	height: 300px;
+	background-color: #f7f7f7;
 	box-shadow: 0 12px 25px #0000003f;
 	border-radius: 32px;
+	padding: 32px;
+}
+.ranges {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+}
+.color {
+	display: flex;
+}
+.wheel {
+	margin-right: 32px;
+}
+.music {
+	margin-top: 16px;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
 }
 </style>

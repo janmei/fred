@@ -99,7 +99,6 @@ export default {
 					return false;
 				};
 				element.addEventListener("mousedown", function() {
-					console.log("down");
 					document.addEventListener("mousemove", mousemove);
 					document.addEventListener("mouseup", mouseup);
 					return false;
@@ -142,7 +141,6 @@ export default {
 			return c + (hue - a) * ((d - c) / (b - a));
 		},
 		clickMove: function(e) {
-			console.log(e);
 			this.captureMovement(e);
 		},
 		captureMovement: function(e) {

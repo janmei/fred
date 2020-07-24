@@ -3,6 +3,7 @@ import Vuex from "vuex";
 // import _ from "lodash";
 Vue.use(Vuex);
 // let scenes = [];
+import vm from "../main";
 
 export default new Vuex.Store({
 	state: {
@@ -117,14 +118,16 @@ export default new Vuex.Store({
 			let newObj = JSON.parse(JSON.stringify(json));
 			state.scenes.push(newObj);
 		},
-		// SET_SCENE(state, msg) {
-		// 	// this.replaceState({ ...state, msg });
-		// 	// console.log(msg.states[1]);
-		// 	// state[1] = msg.states[0];
-		// 	// state[2] = msg.states[1];
-		// 	// state[3] = msg.states[2];
-		// 	// state[4] = msg.states[3];
-		// },
+		PLAY_SONG(state, msg) {
+			let data = {
+				section: msg,
+				songId: state[msg].song.songId,
+			};
+			vm.$socket.emit("play", data);
+		},
+		PAUSE_SONG() {
+			vm.$socket.emit("pause");
+		},
 	},
 	getters: {
 		scenes: (state) => {
@@ -143,6 +146,9 @@ export default new Vuex.Store({
 				context.commit("SET_SAT", data.states[status]);
 				context.commit("SET_BRI", data.states[status]);
 				context.commit("SET_ON", data.states[status]);
+				context.commit("SET_SONG", data.states[status]);
+				context.commit("SET_VOL", data.states[status]);
+				context.commit("PLAY_SONG", data.states[status]);
 			}
 		},
 	},

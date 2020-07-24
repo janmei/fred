@@ -24,7 +24,7 @@ store.subscribe((mutation, state) => {
 	localStorage.setItem("store", JSON.stringify(state));
 });
 
-new Vue({
+export default new Vue({
 	store,
 	beforeCreate() {
 		this.$store.commit("initialiseStore");

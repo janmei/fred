@@ -4,17 +4,32 @@ import pygame
 import os
 import pathlib
 import socket
+import platform
 
-pygame.mixer.init()
-path = '/home/pi/fred/music.ogg'
-print(path)
+system = platform.system()
 
-sound = pygame.mixer.Sound(path)
-device_id = socket.gethostname()
-
-mqtt_topic = "section/%s/#" % device_id
+if system == "Linux":
+    device_id = socket.gethostname()
+    mqtt_topic = "section/%s/#" % device_id
+    song21 = '/home/pi/fred/music.ogg'
+    song22 = '/home/pi/fred/News-Sound.wav'
+    song23 = '/home/pi/fred/music.ogg'
+    pass
+elif system == "Darwin":
+    device_id = os.getenv("SECTION_ID")
+    mqtt_topic = "section/%s/#" % device_id
+    song1 = '/Applications/XAMPP/xamppfiles/htdocs/fred/music.ogg'
+    song2 = '/Applications/XAMPP/xamppfiles/htdocs/fred/News-Sound.wav'
+    song3 = '/Applications/XAMPP/xamppfiles/htdocs/fred/music.ogg'
+    pass
 print(mqtt_topic)
 
+songid = ""
+
+pygame.init()
+sound1 = pygame.mixer.Sound(song1)
+sound2 = pygame.mixer.Sound(song2)
+sound3 = pygame.mixer.Sound(song3)
 
 if device_id == '1':
     lightid = 3
@@ -51,17 +66,38 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     topic = msg.topic
     payload = str(msg.payload, "utf-8")
-    print(payload)
     # print(topic)
     if topic == "section/" + device_id + "/lamp":
         startRequest(payload)
-        print(msg.topic + " " + payload)
         pass
-    if topic == "section/"+ device_id + "/sound":
-        sound.play()
+    elif topic == "section/" + device_id + "/song":
+        songid = payload
+        print(songid)
         pass
-    if topic == "section/" + device_id + "/volume":
-        sound.set_volume(float(payload))
+    elif topic == "section/" + device_id + "/song/play":
+
+        print(payload)
+
+        if payload == "1":
+            sound1.stop()
+            sound1.play()
+            pass
+        elif payload == "2":
+            sound2.stop()
+            sound2.play()
+            pass
+        elif payload == "3":
+            sound2.stop()
+            sound2.play()
+            pass
+        pass
+    elif topic == "section/" + device_id + "/song/pause":
+        # sound.pause()
+        print("Pause")
+        print(payload)
+        pass
+    elif topic == "section/" + device_id + "/song/volume":
+        # sound.set_volume(float(payload)/100)
         print(payload)
         pass
 
