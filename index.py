@@ -5,21 +5,22 @@ import os
 import pathlib
 import socket
 import platform
+import json
 
 system = platform.system()
 
 if system == "Linux":
     device_id = socket.gethostname()
     mqtt_topic = "section/%s/#" % device_id
-    song21 = '/home/pi/fred/music.ogg'
-    song22 = '/home/pi/fred/News-Sound.wav'
-    song23 = '/home/pi/fred/music.ogg'
+    song1 = '/home/pi/fred/song1.ogg'
+    song2 = '/home/pi/fred/song2.ogg'
+    song3 = '/home/pi/fred/music.ogg'
     pass
 elif system == "Darwin":
     device_id = os.getenv("SECTION_ID")
     mqtt_topic = "section/%s/#" % device_id
-    song1 = '/Applications/XAMPP/xamppfiles/htdocs/fred/music.ogg'
-    song2 = '/Applications/XAMPP/xamppfiles/htdocs/fred/News-Sound.wav'
+    song1 = '/Applications/XAMPP/xamppfiles/htdocs/fred/song1.ogg'
+    song2 = '/Applications/XAMPP/xamppfiles/htdocs/fred/song2.ogg'
     song3 = '/Applications/XAMPP/xamppfiles/htdocs/fred/music.ogg'
     pass
 print(mqtt_topic)
@@ -75,32 +76,35 @@ def on_message(client, userdata, msg):
         print(songid)
         pass
     elif topic == "section/" + device_id + "/song/play":
-
         print(payload)
-
         if payload == "1":
-            sound1.stop()
-            sound1.play()
+            stop_all_music()
+            sound1.play(-1)
             pass
         elif payload == "2":
-            sound2.stop()
-            sound2.play()
+            stop_all_music()
+            sound2.play(-1)
             pass
         elif payload == "3":
-            sound2.stop()
-            sound2.play()
+            stop_all_music()
+            sound3.play(-1)
             pass
         pass
+
     elif topic == "section/" + device_id + "/song/pause":
-        # sound.pause()
-        print("Pause")
-        print(payload)
-        pass
+        stop_all_music()
+
     elif topic == "section/" + device_id + "/song/volume":
-        # sound.set_volume(float(payload)/100)
+        sound1.set_volume(float(payload) / 100)
+        sound2.set_volume(float(payload) / 100)
+        sound3.set_volume(float(payload) / 100)
         print(payload)
         pass
 
+def stop_all_music():
+    sound1.stop()
+    sound2.stop()
+    sound3.stop()
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message

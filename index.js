@@ -68,7 +68,11 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("pause", (msg) => {
-		client.publish("section/" + msg + "/song/pause", "true");
+		console.log(msg);
+		client.publish(
+			"section/" + msg.section + "/song/pause",
+			String(msg.songId)
+		);
 	});
 
 	/**

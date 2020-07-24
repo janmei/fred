@@ -125,8 +125,12 @@ export default new Vuex.Store({
 			};
 			vm.$socket.emit("play", data);
 		},
-		PAUSE_SONG() {
-			vm.$socket.emit("pause");
+		PAUSE_SONG(state, msg) {
+			let data = {
+				section: msg,
+				songId: state[msg].song.songId,
+			};
+			vm.$socket.emit("pause", data);
 		},
 	},
 	getters: {
