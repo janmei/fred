@@ -73,8 +73,8 @@ export default {
 		return {
 			wheelSize: 150,
 			pickerSize: 10,
-			pickerTop: 50,
-			pickerLeft: 50,
+			pickerTop: 65,
+			pickerLeft: 65,
 			image: {
 				// src: ,
 				style: {
@@ -85,9 +85,8 @@ export default {
 			},
 			color: {
 				hsb: {
-					h: this.h,
-					s: this.s,
-					b: this.b,
+					h: 0,
+					s: 0,
 				},
 			},
 		};
@@ -207,18 +206,12 @@ export default {
 		this.$watch(
 			"color.hsb",
 			function(newValue) {
-				newValue.b = parseFloat(newValue.b);
-				console.log(newValue.b);
 				this.$emit("changed", newValue);
 			},
 			{ deep: true }
 		);
 	},
-	watch: {
-		b() {
-			this.color.hsb.b = this.b;
-		},
-	},
+	watch: {},
 };
 </script>
 

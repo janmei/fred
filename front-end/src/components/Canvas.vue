@@ -6,7 +6,7 @@
 			<section-vue v-bind:id="4" :empty="true" />
 			<section-vue v-bind:id="3" v-bind:color="true" />
 			<div class="save">
-				<input type="text" v-model="sceneName" />
+				<input type="text" v-model="attr.sceneName" />
 				<button @click="this.saveScene" class="saveScene">Click</button>
 			</div>
 		</div>
@@ -26,7 +26,12 @@ export default {
 	},
 	data: function() {
 		return {
-			sceneName: "",
+			attr: {
+				sceneName: "",
+				variables: {
+					active: false,
+				},
+			},
 		};
 	},
 	props: {},
@@ -34,8 +39,12 @@ export default {
 
 	methods: {
 		saveScene: function() {
-			this.$store.dispatch("saveScene", this.sceneName);
-			this.sceneName = "";
+			if (this.attr.sceneName !== "") {
+				this.$store.dispatch("saveScene", this.attr);
+				this.attr.sceneName = "";
+			} else {
+				console.log("Name not provided");
+			}
 		},
 	},
 };

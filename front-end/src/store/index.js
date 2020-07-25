@@ -13,11 +13,11 @@ export default new Vuex.Store({
 				on: false,
 				hue: 0,
 				sat: 0,
-				bri: 0,
+				bri: 254,
 			},
 			song: {
 				songId: 0,
-				volume: 0,
+				volume: 100,
 			},
 			wind: false,
 
@@ -29,11 +29,11 @@ export default new Vuex.Store({
 				on: false,
 				hue: 0,
 				sat: 0,
-				bri: 0,
+				bri: 254,
 			},
 			song: {
 				songId: 0,
-				volume: 0,
+				volume: 100,
 			},
 			wind: false,
 
@@ -45,11 +45,11 @@ export default new Vuex.Store({
 				on: false,
 				hue: 0,
 				sat: 0,
-				bri: 0,
+				bri: 254,
 			},
 			song: {
 				songId: 0,
-				volume: 0,
+				volume: 100,
 			},
 			wind: false,
 
@@ -61,17 +61,18 @@ export default new Vuex.Store({
 				on: false,
 				hue: 0,
 				sat: 0,
-				bri: 0,
+				bri: 254,
 			},
 			song: {
 				songId: 0,
-				volume: 0,
+				volume: 100,
 			},
 			wind: false,
 
 			selected: "",
 		},
 		scenes: [],
+		activeScene: null,
 	},
 	mutations: {
 		initialiseStore(state) {
@@ -106,7 +107,8 @@ export default new Vuex.Store({
 			// let state1 = _.clone(state["1"]);
 			// let state2 = _.cloneDeep(state["2"]);
 			json = {
-				name: msg,
+				name: msg.sceneName,
+				variables: msg.variables,
 				id: this.state.scenes.length + 1,
 				states: [
 					{ ...state["1"] },
@@ -132,12 +134,34 @@ export default new Vuex.Store({
 			};
 			vm.$socket.emit("pause", data);
 		},
+		// SET_FADE(state, msg) {
+		// 	state.scenes[msg.section - 1].variables.fade = msg.fade;
+		// },
+		// SET_FADETIME(state, msg) {
+		// 	state.scenes[msg.section - 1].variables.fadeTime = msg.fadeTime;
+		// },
+		// SET_SCENE_STATUS(state, msg) {
+		// 	state.activeScene = msg;
+		// 	state.scenes[msg.id - 1].variables.active = true;
+		// },
+		// DEACTIVATE_SCENE(state) {
+		// 	state.scenes[state.activeScene.id - 1].variables.active = false;
+		// 	state.activeScene = null;
+		// },
+		// DEACTIVATE_OTHER_SCENES(state) {
+		// 	for (var scene of state.scenes) {
+		// 		console.log(scene);
+		// 		if (scene.id !== state.activeScene.id) {
+		// 			scene.variables.active = false;
+		// 		}
+		// 	}
+		// },
 	},
-	getters: {
-		scenes: (state) => {
-			return JSON.parse(JSON.stringify(state.scenes));
-		},
-	},
+	// getters: {
+	// 	scenes: (state) => {
+	// 		return JSON.parse(JSON.stringify(state.scenes));
+	// 	},
+	// },
 	actions: {
 		saveScene(context, data) {
 			context.commit("SAVE_SCENE", data);
@@ -152,9 +176,14 @@ export default new Vuex.Store({
 				context.commit("SET_ON", data.states[status]);
 				context.commit("SET_SONG", data.states[status]);
 				context.commit("SET_VOL", data.states[status]);
-				context.commit("PLAY_SONG", data.states[status]);
+				context.commit("PLAY_SONG", data.states[status].section);
 			}
+			// context.commit("SET_SCENE_STATUS", data);
+			// context.commit("DEACTIVATE_OTHER_SCENES");
 		},
+		// deactivateOtherScenes(context) {
+		// 	context.commit("DEACTIVATE_OTHER_SCENES");
+		// },
 	},
 	modules: {
 		// a big store can be devided into small modules

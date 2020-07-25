@@ -10,27 +10,37 @@
 						<ColorPicker @changed="updateColor" :b="this.bri" />
 					</div>
 					<div class="ranges">
-						<div>
-							<label for="on">Power</label>
-							<input type="checkbox" v-model="on" name="on" />
-						</div>
-						<label for="hueinput">Hue</label>
-						<input
-							type="range"
-							name="hueinput"
-							v-model="hue"
-							max="65535"
-							step="1000"
-							@input="report"
-						/>
-						<label for="satinput">Sat</label>
-						<input
-							type="range"
-							name="satinput"
-							v-model="sat"
-							max="254"
-							@input="report"
-						/>
+						<form action="">
+							<div>
+								<label for="on">Power</label>
+								<input
+									type="checkbox"
+									v-model="on"
+									name="on"
+									@change="this.report"
+								/>
+							</div>
+							<label for="hueinput">Hue {{ this.hue }}</label>
+							<input
+								type="range"
+								name="hueinput"
+								v-model="hue"
+								max="65535"
+								step="1000"
+							/>
+							<label for="satinput">Sat {{ this.sat }}</label>
+							<input type="range" name="satinput" v-model="sat" max="254" />
+							<label for="briinput">Bri {{ this.bri }}</label>
+							<input type="range" name="briinput" v-model="bri" max="254" />
+						</form>
+					</div>
+				</div>
+				<div v-else>
+					<div>
+						<label for="on">Power</label>
+						<input type="checkbox" v-model="on" name="on" @change="report" />
+					</div>
+					<div class="ranges">
 						<label for="briinput">Bri {{ this.bri }}</label>
 						<input
 							type="range"
@@ -41,27 +51,25 @@
 						/>
 					</div>
 				</div>
-				<div v-else>
-					<div>
-						<label for="on">Power</label>
-						<input type="checkbox" v-model="on" name="on" />
-					</div>
-					<label for="briinput">Bri {{ this.bri }}</label>
-					<input type="range" name="briinput" v-model="bri" max="254" />
-				</div>
 
 				<div class="music">
-					<select v-model="song" @change="reportSound">
-						<option value="1">Song 1</option>
-						<option value="2">Song 2</option>
-						<option value="3">Song 3</option>
-					</select>
-					<button @click="this.playSong">Play</button>
-					<button @click="this.pauseSong">Pause</button>
+					<div class="column">
+						<select v-model="song" @change="reportSound">
+							<option value="0">Wählen</option>
+							<option value="1">Song 1</option>
+							<option value="2">Song 2</option>
+							<option value="3">Song 3</option>
+						</select>
+						<div class="music-controls">
+							<button @click="this.playSong">Play</button>
+							<button @click="this.pauseSong">Pause</button>
+						</div>
+					</div>
 					<label for="volume">Vol {{ this.volume }}</label>
 					<input
 						type="range"
 						name="volume"
+						value="100"
 						v-model="volume"
 						max="100"
 						@input="reportVol"
@@ -77,6 +85,7 @@
 
 <script>
 import ColorPicker from "./ColorWheel";
+// let deactivated;
 
 export default {
 	name: "Section",
@@ -90,6 +99,14 @@ export default {
 		hueId: Number,
 		sectionId: String,
 		empty: Boolean,
+		fadeTime: Number,
+		fade: Boolean,
+	},
+	data() {
+		return {
+			tweeningValue: 0,
+			scene: null,
+		};
 	},
 	methods: {
 		reportVol: function() {
@@ -103,13 +120,13 @@ export default {
 		},
 
 		report: function() {
+			console.log("data");
 			let data = this.$store.state[String(this.id)];
 			this.$socket.emit("lamp", data);
 		},
 		updateColor: function(data) {
 			this.hue = this.calcHue(data.h);
 			this.sat = this.calc254(data.s);
-			this.bri = data.b;
 			this.report(this.$store.state[String(this.id)]);
 		},
 		calcHue: function(hue) {
@@ -128,9 +145,27 @@ export default {
 		},
 	},
 	computed: {
+		// sceneActive: {
+		// 	get() {
+		// 		if (this.$store.state.activeScene != null) {
+		// 			// Szene aktiv
+
+		// 			deactivated = false;
+		// 			return true;
+		// 		} else {
+		// 			deactivated = true;
+		// 			return false;
+		// 		}
+		// 	},
+		// },
+		// activeScene: {
+		// 	get() {
+		// 		return this.$store.state.activeScene;
+		// 	},
+		// },
 		bri: {
 			get() {
-				// this.report(this.$store.state[String(this.id)]);
+				this.report(this.$store.state[String(this.id)]);
 				return this.$store.state[String(this.id)].lamp.bri;
 			},
 			set(val) {
@@ -148,6 +183,7 @@ export default {
 			get() {
 				// this.report(this.$store.state[String(this.id)]);
 				let data = this.$store.state[String(this.id)].lamp.hue;
+				console.log(data);
 				return data;
 			},
 			set(val) {
@@ -158,6 +194,10 @@ export default {
 					},
 				};
 				this.$store.commit("SET_HUE", data);
+				// if (this.sceneActive && !deactivated) {
+				// 	this.$store.commit("DEACTIVATE_SCENE");
+				// 	deactivated = true;
+				// }
 				// this.report(this.$store.state[String(this.id)]);
 			},
 		},
@@ -200,13 +240,15 @@ export default {
 				return this.$store.state[String(this.id)].song.songId;
 			},
 			set(val) {
-				let data = {
-					section: String(this.id),
-					song: {
-						songId: Number(val),
-					},
-				};
-				this.$store.commit("SET_SONG", data);
+				if (Number(val) > 0) {
+					let data = {
+						section: String(this.id),
+						song: {
+							songId: Number(val),
+						},
+					};
+					this.$store.commit("SET_SONG", data);
+				}
 			},
 		},
 		volume: {
@@ -252,6 +294,17 @@ section {
 .music {
 	margin-top: 16px;
 	width: 50%;
+	display: flex;
+	flex-direction: column;
+	.music-controls {
+		margin-bottom: 12px;
+	}
+}
+.row {
+	display: flex;
+	flex-direction: row;
+}
+.column {
 	display: flex;
 	flex-direction: column;
 }
