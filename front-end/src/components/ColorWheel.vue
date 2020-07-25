@@ -13,7 +13,7 @@
 					}"
 				>
 					<img
-						:src="image.src"
+						src="@/assets/ryb.png"
 						alt="Color Wheel"
 						:style="image.style"
 						draggable="true"
@@ -48,6 +48,7 @@
 						max="254"
 						step="1"
 						v-model="color.hsb.b"
+						hidden
 					/>
 				</div>
 			</div>
@@ -65,12 +66,12 @@ export default {
 	},
 	data: function() {
 		return {
-			wheelSize: 120,
-			pickerSize: 8,
+			wheelSize: 150,
+			pickerSize: 10,
 			pickerTop: 50,
 			pickerLeft: 50,
 			image: {
-				src: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/435311/ryb.png",
+				// src: ,
 				style: {
 					width: "100%",
 					height: "auto",
@@ -201,7 +202,7 @@ export default {
 		this.$watch(
 			"color.hsb",
 			function(newValue) {
-				newValue.b = parseFloat(newValue.b);
+				// newValue.b = parseFloat(newValue.b);
 				this.$emit("changed", newValue);
 			},
 			{ deep: true }

@@ -18,11 +18,12 @@
 						<input type="range" name="hueinput" v-model="hue" max="65535" />
 						<label for="satinput">Sat</label>
 						<input type="range" name="satinput" v-model="sat" max="254" />
-						<label for="Briinput">Bri {{ this.bri }}</label>
+						<label for="briinput">Bri {{ this.bri }}</label>
 						<input type="range" name="briinput" v-model="bri" max="254" />
 					</div>
 				</div>
 				<div v-else>
+					<label for="briinput">Bri {{ this.bri }}</label>
 					<input type="range" name="briinput" v-model="bri" max="254" />
 				</div>
 
@@ -34,6 +35,7 @@
 					</select>
 					<button @click="this.playSong">Play</button>
 					<button @click="this.pauseSong">Pause</button>
+					<label for="volume">Vol {{ this.volume }}</label>
 					<input
 						type="range"
 						name="volume"

@@ -9,7 +9,10 @@
 			"type": "python",
 			"request": "launch",
 			"program": "/Applications/XAMPP/xamppfiles/htdocs/fred/index.py",
-			"console": "integratedTerminal"
+			"console": "integratedTerminal",
+			"env": {
+				"SECTION_ID": "2"
+			}
 		}
 	]
 }
