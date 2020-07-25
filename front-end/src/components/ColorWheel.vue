@@ -39,7 +39,7 @@
 			</div>
 			<div class="slider-box">
 				<div class="slider">
-					<label for="brightness">Brightness: {{ color.hsb.b }}</label
+					<label for="brightness" hidden>Brightness: {{ color.hsb.b }}</label
 					><br />
 					<input
 						id="brightness"
@@ -64,6 +64,11 @@ export default {
 		s: Number,
 		b: Number,
 	},
+	// computed: {
+	// 	bri: function() {
+	// 		return this.b;
+	// 	},
+	// },
 	data: function() {
 		return {
 			wheelSize: 150,
@@ -202,11 +207,17 @@ export default {
 		this.$watch(
 			"color.hsb",
 			function(newValue) {
-				// newValue.b = parseFloat(newValue.b);
+				newValue.b = parseFloat(newValue.b);
+				console.log(newValue.b);
 				this.$emit("changed", newValue);
 			},
 			{ deep: true }
 		);
+	},
+	watch: {
+		b() {
+			this.color.hsb.b = this.b;
+		},
 	},
 };
 </script>

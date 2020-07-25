@@ -7,7 +7,7 @@
 				</b>
 				<div v-if="color" class="color">
 					<div class="wheel">
-						<ColorPicker @changed="updateColor" />
+						<ColorPicker @changed="updateColor" :b="this.bri" />
 					</div>
 					<div class="ranges">
 						<div>
@@ -15,14 +15,37 @@
 							<input type="checkbox" v-model="on" name="on" />
 						</div>
 						<label for="hueinput">Hue</label>
-						<input type="range" name="hueinput" v-model="hue" max="65535" />
+						<input
+							type="range"
+							name="hueinput"
+							v-model="hue"
+							max="65535"
+							step="1000"
+							@input="report"
+						/>
 						<label for="satinput">Sat</label>
-						<input type="range" name="satinput" v-model="sat" max="254" />
+						<input
+							type="range"
+							name="satinput"
+							v-model="sat"
+							max="254"
+							@input="report"
+						/>
 						<label for="briinput">Bri {{ this.bri }}</label>
-						<input type="range" name="briinput" v-model="bri" max="254" />
+						<input
+							type="range"
+							name="briinput"
+							v-model="bri"
+							max="254"
+							@input="report"
+						/>
 					</div>
 				</div>
 				<div v-else>
+					<div>
+						<label for="on">Power</label>
+						<input type="checkbox" v-model="on" name="on" />
+					</div>
 					<label for="briinput">Bri {{ this.bri }}</label>
 					<input type="range" name="briinput" v-model="bri" max="254" />
 				</div>
@@ -79,7 +102,8 @@ export default {
 			this.$socket.emit("song", data);
 		},
 
-		report: function(data) {
+		report: function() {
+			let data = this.$store.state[String(this.id)];
 			this.$socket.emit("lamp", data);
 		},
 		updateColor: function(data) {
