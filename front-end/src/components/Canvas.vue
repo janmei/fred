@@ -6,8 +6,15 @@
 			<section-vue v-bind:id="4" :empty="true" />
 			<section-vue v-bind:id="3" v-bind:color="true" :music="true" />
 			<div class="save">
-				<input type="text" v-model="attr.sceneName" />
-				<button @click="this.saveScene" class="saveScene">Click</button>
+				<div class="wrapper">
+					<p>
+						Szene speichern
+					</p>
+					<input type="text" v-model="attr.sceneName" class="sceneName" />
+					<button @click="this.saveScene" class="saveScene btn activate">
+						Sichern
+					</button>
+				</div>
 			</div>
 		</div>
 
@@ -67,13 +74,22 @@ export default {
 	justify-content: center;
 	// align-items: center;
 	.save {
-		width: fit-content;
-		height: 60px;
+		display: flex;
+		align-items: center;
+		width: 300px;
+		height: 100px;
 		box-shadow: 0 12px 25px #0000003f;
 		padding: 16px;
+		border-radius: 8px;
+
+		.sceneName {
+			height: 30px;
+			font-size: 16px;
+			font-weight: 700;
+		}
 		.saveScene {
-			width: 60px;
-			height: 20px;
+			width: 70px;
+			margin-left: 8px;
 		}
 	}
 }

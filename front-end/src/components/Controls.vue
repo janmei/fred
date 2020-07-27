@@ -22,7 +22,7 @@
 			Aktiv
 			<input type="checkbox" name="fade" id="" v-model="active" disabled />
 		</div> -->
-		<button @click="setScene" class="activate">Szene aktivieren</button>
+		<button @click="setScene" class="btn activate">Szene aktivieren</button>
 	</div>
 </template>
 
@@ -113,20 +113,7 @@ export default {
 		font-weight: 700;
 		margin: 12px 0;
 	}
-	.activate {
-		appearance: none;
-		height: auto;
-		padding: 8px;
-		background-color: rgb(57, 156, 65);
-		border: none;
-		border-radius: 4px;
-		color: #fff;
-		font-size: 12px;
-		&:hover {
-			background-color: rgb(35, 99, 41);
-			cursor: pointer;
-		}
-	}
+
 	&.active {
 		background-color: rgb(170, 255, 170);
 		border: 4px solid #0000001c;
@@ -137,36 +124,6 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		.btn {
-			appearance: none;
-			width: 100%;
-			height: auto;
-			padding: 8px;
-			background-color: rgb(221, 81, 81);
-			border: none;
-			border-radius: 4px;
-			color: #fff;
-			font-size: 12px;
-			margin-bottom: 4px;
-			&.delete {
-				margin-right: 2px;
-				background-color: rgb(221, 81, 81);
-
-				&:hover {
-					background-color: rgb(160, 57, 57);
-					cursor: pointer;
-				}
-			}
-			&.edit {
-				margin-left: 2px;
-				background-color: rgb(75, 103, 224);
-
-				&:hover {
-					background-color: rgb(48, 67, 150);
-					cursor: pointer;
-				}
-			}
-		}
 	}
 	hr {
 		width: 100%;
