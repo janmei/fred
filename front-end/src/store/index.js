@@ -137,6 +137,17 @@ export default new Vuex.Store({
 		DELETE_SCENE(state, id) {
 			state.scenes.splice(id, 1);
 		},
+		OVERRIDE_SCENE(state, data) {
+			let states = [
+				{ ...state["1"] },
+				{ ...state["2"] },
+				{ ...state["3"] },
+				{ ...state["4"] },
+			];
+			let newObj = JSON.parse(JSON.stringify(states));
+
+			state.scenes[data.i].states = newObj;
+		},
 		// SET_FADE(state, msg) {
 		// 	state.scenes[msg.section - 1].variables.fade = msg.fade;
 		// },
@@ -197,6 +208,13 @@ export default new Vuex.Store({
 
 			if (i >= 0) {
 				context.commit("DELETE_SCENE", i);
+			}
+		},
+		overrideScene(context, data) {
+			let i = context.getters.scene(data);
+
+			if (i >= 0) {
+				context.commit("OVERRIDE_SCENE", { i: i, data: data });
 			}
 		},
 	},

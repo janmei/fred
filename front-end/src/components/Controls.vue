@@ -1,8 +1,22 @@
 <template>
 	<div v-bind:class="[defaultClass]">
 		<div class="wrapper">
-			<h3>{{ scene.name }}</h3>
-			<button @click="deleteScene" class="delete">Löschen</button>
+			<div v-if="editable">
+				<input type="text" v-model="editedText" class="titleEdit" />
+			</div>
+			<div v-else>
+				<h3>{{ scene.name }}</h3>
+			</div>
+		</div>
+		<div>
+			<div v-if="editable" class="wrapper">
+				<button @click="cancelEdit" class="btn delete">Abbrechen</button>
+				<button @click="saveScene" class="btn edit">Speichern</button>
+			</div>
+			<div v-else class="wrapper">
+				<button @click="deleteScene" class="btn delete">Löschen</button>
+				<button @click="editScene" class="btn edit">Bearbeiten</button>
+			</div>
 		</div>
 		<!-- <div>
 			Aktiv
@@ -21,6 +35,8 @@ export default {
 	data() {
 		return {
 			defaultClass: "varControls",
+			editable: false,
+			editedText: this.scene.name,
 		};
 	},
 
@@ -30,6 +46,18 @@ export default {
 		},
 		deleteScene: function() {
 			this.$store.dispatch("deleteScene", this.scene);
+		},
+		editScene: function() {
+			this.editable = true;
+		},
+		saveScene: function() {
+			this.editable = false;
+			this.scene.name = this.editedText;
+			let newScene = JSON.parse(JSON.stringify(this.scene));
+			this.$store.dispatch("overrideScene", newScene);
+		},
+		cancelEdit: function() {
+			this.editable = false;
 		},
 	},
 	computed: {
@@ -77,6 +105,14 @@ export default {
 		display: flex;
 		flex-direction: column;
 	}
+
+	.titleEdit {
+		height: 30px;
+		width: 100%;
+		font-size: 16px;
+		font-weight: 700;
+		margin: 12px 0;
+	}
 	.activate {
 		appearance: none;
 		height: auto;
@@ -99,10 +135,11 @@ export default {
 	}
 	.wrapper {
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
-		.delete {
+		justify-content: space-between;
+		.btn {
 			appearance: none;
+			width: 100%;
 			height: auto;
 			padding: 8px;
 			background-color: rgb(221, 81, 81);
@@ -110,9 +147,24 @@ export default {
 			border-radius: 4px;
 			color: #fff;
 			font-size: 12px;
-			&:hover {
-				background-color: rgb(35, 99, 41);
-				cursor: pointer;
+			margin-bottom: 4px;
+			&.delete {
+				margin-right: 2px;
+				background-color: rgb(221, 81, 81);
+
+				&:hover {
+					background-color: rgb(160, 57, 57);
+					cursor: pointer;
+				}
+			}
+			&.edit {
+				margin-left: 2px;
+				background-color: rgb(75, 103, 224);
+
+				&:hover {
+					background-color: rgb(48, 67, 150);
+					cursor: pointer;
+				}
 			}
 		}
 	}
