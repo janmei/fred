@@ -4,7 +4,6 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 // let scenes = [];
 import vm from "../main";
-import { Store } from "mqtt";
 
 export default new Vuex.Store({
 	state: {

@@ -1,12 +1,14 @@
 <template>
 	<div v-bind:class="[defaultClass]">
-		<h3>{{ scene.id }}</h3>
+		<div class="wrapper">
+			<h3>{{ scene.name }}</h3>
+			<button @click="deleteScene" class="delete">Löschen</button>
+		</div>
 		<!-- <div>
 			Aktiv
 			<input type="checkbox" name="fade" id="" v-model="active" disabled />
 		</div> -->
-		<button @click="setScene">Szene aktivieren</button>
-		<button @click="deleteScene">Löschen</button>
+		<button @click="setScene" class="activate">Szene aktivieren</button>
 	</div>
 </template>
 
@@ -75,11 +77,47 @@ export default {
 		display: flex;
 		flex-direction: column;
 	}
+	.activate {
+		appearance: none;
+		height: auto;
+		padding: 8px;
+		background-color: rgb(57, 156, 65);
+		border: none;
+		border-radius: 4px;
+		color: #fff;
+		font-size: 12px;
+		&:hover {
+			background-color: rgb(35, 99, 41);
+			cursor: pointer;
+		}
+	}
 	&.active {
 		background-color: rgb(170, 255, 170);
 		border: 4px solid #0000001c;
 		border-radius: 8px;
 		box-sizing: content-box;
+	}
+	.wrapper {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.delete {
+			appearance: none;
+			height: auto;
+			padding: 8px;
+			background-color: rgb(221, 81, 81);
+			border: none;
+			border-radius: 4px;
+			color: #fff;
+			font-size: 12px;
+			&:hover {
+				background-color: rgb(35, 99, 41);
+				cursor: pointer;
+			}
+		}
+	}
+	hr {
+		width: 100%;
 	}
 }
 </style>
