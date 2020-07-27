@@ -49,7 +49,7 @@ if device_id == '4':
 
 def startRequest(data):
 
-    url = "http://192.168.0.20/api/vWOsvVaprpwthxcEnlbcxVjhU6deEL1JV7X8PnXj/lights/" + str(lightid) + "/state"
+    url = "http://192.168.188.26/api/vWOsvVaprpwthxcEnlbcxVjhU6deEL1JV7X8PnXj/lights/" + str(lightid) + "/state"
     payload = data
     headers = {
     'Content-Type': 'application/json'

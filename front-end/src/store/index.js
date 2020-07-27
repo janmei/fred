@@ -4,6 +4,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 // let scenes = [];
 import vm from "../main";
+import { Store } from "mqtt";
 
 export default new Vuex.Store({
 	state: {
@@ -134,6 +135,9 @@ export default new Vuex.Store({
 			};
 			vm.$socket.emit("pause", data);
 		},
+		DELETE_SCENE(state, id) {
+			state.scenes.splice(id, 1);
+		},
 		// SET_FADE(state, msg) {
 		// 	state.scenes[msg.section - 1].variables.fade = msg.fade;
 		// },
@@ -157,11 +161,16 @@ export default new Vuex.Store({
 		// 	}
 		// },
 	},
-	// getters: {
-	// 	scenes: (state) => {
-	// 		return JSON.parse(JSON.stringify(state.scenes));
-	// 	},
-	// },
+	getters: {
+		scene: (state) => (data) => {
+			let id = state.scenes.findIndex((e) => e.id === data.id);
+			if (id === -1) {
+				return -1;
+			} else {
+				return id;
+			}
+		},
+	},
 	actions: {
 		saveScene(context, data) {
 			context.commit("SAVE_SCENE", data);
@@ -184,6 +193,13 @@ export default new Vuex.Store({
 		// deactivateOtherScenes(context) {
 		// 	context.commit("DEACTIVATE_OTHER_SCENES");
 		// },
+		deleteScene(context, data) {
+			let i = context.getters.scene(data);
+
+			if (i >= 0) {
+				context.commit("DELETE_SCENE", i);
+			}
+		},
 	},
 	modules: {
 		// a big store can be devided into small modules

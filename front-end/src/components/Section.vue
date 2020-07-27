@@ -51,29 +51,30 @@
 						/>
 					</div>
 				</div>
-
-				<div class="music">
-					<div class="column">
-						<select v-model="song" @change="reportSound">
-							<option value="0">Wählen</option>
-							<option value="1">Song 1</option>
-							<option value="2">Song 2</option>
-							<option value="3">Song 3</option>
-						</select>
-						<div class="music-controls">
-							<button @click="this.playSong">Play</button>
-							<button @click="this.pauseSong">Pause</button>
+				<div v-if="music">
+					<div class="music">
+						<div class="column">
+							<select v-model="song" @change="reportSound">
+								<option value="0">Wählen</option>
+								<option value="1">Song 1</option>
+								<option value="2">Song 2</option>
+								<option value="3">Song 3</option>
+							</select>
+							<div class="music-controls">
+								<button @click="this.playSong">Play</button>
+								<button @click="this.pauseSong">Pause</button>
+							</div>
 						</div>
+						<label for="volume">Vol {{ this.volume }}</label>
+						<input
+							type="range"
+							name="volume"
+							value="100"
+							v-model="volume"
+							max="100"
+							@input="reportVol"
+						/>
 					</div>
-					<label for="volume">Vol {{ this.volume }}</label>
-					<input
-						type="range"
-						name="volume"
-						value="100"
-						v-model="volume"
-						max="100"
-						@input="reportVol"
-					/>
 				</div>
 			</div>
 			<div v-else>
@@ -101,6 +102,7 @@ export default {
 		empty: Boolean,
 		fadeTime: Number,
 		fade: Boolean,
+		music: Boolean,
 	},
 	data() {
 		return {

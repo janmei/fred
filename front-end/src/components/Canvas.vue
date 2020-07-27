@@ -1,10 +1,10 @@
 <template>
 	<div class="canvasWrapper">
 		<div class="interactionCanvas">
-			<section-vue v-bind:id="1" />
-			<section-vue v-bind:id="2" v-bind:color="true" />
+			<section-vue v-bind:id="2" v-bind:color="true" :music="true" />
+			<section-vue v-bind:id="1" v-bind:music="false" />
 			<section-vue v-bind:id="4" :empty="true" />
-			<section-vue v-bind:id="3" v-bind:color="true" />
+			<section-vue v-bind:id="3" v-bind:color="true" :music="true" />
 			<div class="save">
 				<input type="text" v-model="attr.sceneName" />
 				<button @click="this.saveScene" class="saveScene">Click</button>

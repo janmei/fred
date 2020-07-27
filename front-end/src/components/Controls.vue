@@ -1,11 +1,12 @@
 <template>
-	<div v-bind:class="[{ active: active }, defaultClass]">
+	<div v-bind:class="[defaultClass]">
 		<h3>{{ scene.id }}</h3>
-		<div>
+		<!-- <div>
 			Aktiv
 			<input type="checkbox" name="fade" id="" v-model="active" disabled />
-		</div>
+		</div> -->
 		<button @click="setScene">Szene aktivieren</button>
+		<button @click="deleteScene">Löschen</button>
 	</div>
 </template>
 
@@ -24,6 +25,9 @@ export default {
 	methods: {
 		setScene: function() {
 			this.$store.dispatch("setScene", this.scene);
+		},
+		deleteScene: function() {
+			this.$store.dispatch("deleteScene", this.scene);
 		},
 	},
 	computed: {
@@ -51,11 +55,11 @@ export default {
 		// 		this.$store.commit("SET_FADETIME", data);
 		// 	},
 		// },
-		active: {
-			get() {
-				return this.$store.state.scenes[this.scene.id - 1].variables.active;
-			},
-		},
+		// active: {
+		// 	get() {
+		// 		return this.$store.state.scenes[this.scene.id - 1].variables.active;
+		// 	},
+		// },
 	},
 };
 </script>
