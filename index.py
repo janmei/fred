@@ -41,6 +41,11 @@ pygame.init()
 sound1 = pygame.mixer.Sound(song1)
 sound2 = pygame.mixer.Sound(song2)
 sound3 = pygame.mixer.Sound(song3)
+sound4 = pygame.mixer.Sound(song4)
+sound5 = pygame.mixer.Sound(song5)
+sound6 = pygame.mixer.Sound(song6)
+sound7 = pygame.mixer.Sound(song7)
+sound8 = pygame.mixer.Sound(song8)
 
 if device_id == '1':
     lightid = 3
