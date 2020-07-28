@@ -14,14 +14,24 @@ if system == "Linux":
     mqtt_topic = "section/%s/#" % device_id
     song1 = '/home/pi/fred/song1.ogg'
     song2 = '/home/pi/fred/song2.ogg'
-    song3 = '/home/pi/fred/music.ogg'
+    song3 = '/home/pi/fred/piano_drums.ogg'
+    song4 = '/home/pi/fred/art-of-silence.ogg'
+    song5 = '/home/pi/fred/slow-beat.ogg'
+    song6 = '/home/pi/fred/metro-station.ogg'
+    song7 = '/home/pi/fred/rain.ogg'
+    song8 = '/home/pi/fred/forest.ogg'
     pass
 elif system == "Darwin":
     device_id = os.getenv("SECTION_ID")
     mqtt_topic = "section/%s/#" % device_id
     song1 = '/Applications/XAMPP/xamppfiles/htdocs/fred/song1.ogg'
     song2 = '/Applications/XAMPP/xamppfiles/htdocs/fred/song2.ogg'
-    song3 = '/Applications/XAMPP/xamppfiles/htdocs/fred/music.ogg'
+    song3 = '/Applications/XAMPP/xamppfiles/htdocs/fred/piano_drums.ogg'
+    song4 = '/Applications/XAMPP/xamppfiles/htdocs/fred/art-of-silence.ogg'
+    song5 = '/Applications/XAMPP/xamppfiles/htdocs/fred/slow-beat.ogg'
+    song6 = '/Applications/XAMPP/xamppfiles/htdocs/fred/metro-station.ogg'
+    song7 = '/Applications/XAMPP/xamppfiles/htdocs/fred/rain.ogg'
+    song8 = '/Applications/XAMPP/xamppfiles/htdocs/fred/forest.ogg'
     pass
 print(mqtt_topic)
 
@@ -90,7 +100,31 @@ def on_message(client, userdata, msg):
             sound3.play(-1)
             pass
         pass
-
+        elif payload == "4":
+            stop_all_music()
+            sound4.play(-1)
+            pass
+        pass
+        elif payload == "5":
+            stop_all_music()
+            sound5.play(-1)
+            pass
+        pass        
+        elif payload == "6":
+            stop_all_music()
+            sound6.play(-1)
+            pass
+        pass        
+        elif payload == "7":
+            stop_all_music()
+            sound7.play(-1)
+            pass
+        pass        
+        elif payload == "8":
+            stop_all_music()
+            sound8.play(-1)
+            pass
+        pass
     elif topic == "section/" + device_id + "/song/pause":
         stop_all_music()
 
@@ -98,6 +132,11 @@ def on_message(client, userdata, msg):
         sound1.set_volume(float(payload) / 100)
         sound2.set_volume(float(payload) / 100)
         sound3.set_volume(float(payload) / 100)
+        sound4.set_volume(float(payload) / 100)
+        sound5.set_volume(float(payload) / 100)
+        sound6.set_volume(float(payload) / 100)
+        sound7.set_volume(float(payload) / 100)
+        sound8.set_volume(float(payload) / 100)
         print(payload)
         pass
 
@@ -105,6 +144,11 @@ def stop_all_music():
     sound1.stop()
     sound2.stop()
     sound3.stop()
+    sound4.stop()
+    sound5.stop()
+    sound6.stop()
+    sound7.stop()
+    sound8.stop()
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message

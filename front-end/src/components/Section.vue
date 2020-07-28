@@ -56,9 +56,14 @@
 						<div class="column">
 							<select v-model="song" @change="reportSound">
 								<option value="0">Wählen</option>
-								<option value="1">Song 1</option>
-								<option value="2">Song 2</option>
-								<option value="3">Song 3</option>
+								<option value="1">Ruhiges Piano mit Beat</option>
+								<option value="2">Ruhig</option>
+								<option value="3">Piano mit Drums</option>
+								<option value="4">Schnelles Piano mit Beat</option>
+								<option value="5">Langsamer Beat</option>
+								<option value="6">Metro</option>
+								<option value="7">Regen</option>
+								<option value="8">Wald</option>
 							</select>
 							<div class="music-controls">
 								<button @click="this.playSong">Play</button>
