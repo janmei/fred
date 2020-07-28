@@ -12,26 +12,26 @@ system = platform.system()
 if system == "Linux":
     device_id = socket.gethostname()
     mqtt_topic = "section/%s/#" % device_id
-    song1 = '/home/pi/fred/song1.ogg'
-    song2 = '/home/pi/fred/song2.ogg'
-    song3 = '/home/pi/fred/piano_drums.ogg'
-    song4 = '/home/pi/fred/art-of-silence.ogg'
-    song5 = '/home/pi/fred/slow-beat.ogg'
-    song6 = '/home/pi/fred/metro-station.ogg'
-    song7 = '/home/pi/fred/rain.ogg'
-    song8 = '/home/pi/fred/forest.ogg'
+    song1 = '/home/pi/fred/sounds/song1.ogg'
+    song2 = '/home/pi/fred/sounds/song2.ogg'
+    song3 = '/home/pi/fred/sounds/piano_drums.ogg'
+    song4 = '/home/pi/fred/sounds/art-of-silence.ogg'
+    song5 = '/home/pi/fred/sounds/slow-beat.ogg'
+    song6 = '/home/pi/fred/sounds/metro-station.ogg'
+    song7 = '/home/pi/fred/sounds/rain.ogg'
+    song8 = '/home/pi/fred/sounds/forest.ogg'
     pass
 elif system == "Darwin":
     device_id = os.getenv("SECTION_ID")
     mqtt_topic = "section/%s/#" % device_id
-    song1 = '/Applications/XAMPP/xamppfiles/htdocs/fred/song1.ogg'
-    song2 = '/Applications/XAMPP/xamppfiles/htdocs/fred/song2.ogg'
-    song3 = '/Applications/XAMPP/xamppfiles/htdocs/fred/piano_drums.ogg'
-    song4 = '/Applications/XAMPP/xamppfiles/htdocs/fred/art-of-silence.ogg'
-    song5 = '/Applications/XAMPP/xamppfiles/htdocs/fred/slow-beat.ogg'
-    song6 = '/Applications/XAMPP/xamppfiles/htdocs/fred/metro-station.ogg'
-    song7 = '/Applications/XAMPP/xamppfiles/htdocs/fred/rain.ogg'
-    song8 = '/Applications/XAMPP/xamppfiles/htdocs/fred/forest.ogg'
+    song1 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/song1.ogg'
+    song2 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/song2.ogg'
+    song3 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/piano_drums.ogg'
+    song4 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/art-of-silence.ogg'
+    song5 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/slow-beat.ogg'
+    song6 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/metro-station.ogg'
+    song7 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/rain.ogg'
+    song8 = '/Applications/XAMPP/xamppfiles/htdocs/fred/sounds/forest.ogg'
     pass
 print(mqtt_topic)
 
