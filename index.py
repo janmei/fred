@@ -104,32 +104,26 @@ def on_message(client, userdata, msg):
             stop_all_music()
             sound3.play(-1)
             pass
-        pass
         elif payload == "4":
             stop_all_music()
             sound4.play(-1)
             pass
-        pass
         elif payload == "5":
             stop_all_music()
             sound5.play(-1)
-            pass
-        pass        
+            pass   
         elif payload == "6":
             stop_all_music()
             sound6.play(-1)
-            pass
-        pass        
+            pass    
         elif payload == "7":
             stop_all_music()
             sound7.play(-1)
             pass
-        pass        
         elif payload == "8":
             stop_all_music()
             sound8.play(-1)
             pass
-        pass
     elif topic == "section/" + device_id + "/song/pause":
         stop_all_music()
 
