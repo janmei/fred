@@ -2,7 +2,7 @@
 	<div class="variables">
 		<h2>Szenen</h2>
 
-		<div v-for="scene in this.getScenes" v-bind:key="scene.id">
+		<div v-for="scene in this.getScenes" v-bind:key="scene.name">
 			<controls-vue v-bind:scene="scene" />
 		</div>
 	</div>

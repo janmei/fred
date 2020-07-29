@@ -21,13 +21,7 @@
 								/>
 							</div>
 							<label for="hueinput">Hue {{ this.hue }}</label>
-							<input
-								type="range"
-								name="hueinput"
-								v-model="hue"
-								max="65535"
-								step="1000"
-							/>
+							<input type="range" name="hueinput" v-model="hue" max="65535" />
 							<label for="satinput">Sat {{ this.sat }}</label>
 							<input type="range" name="satinput" v-model="sat" max="254" />
 							<label for="briinput">Bri {{ this.bri }}</label>
@@ -255,6 +249,8 @@ export default {
 						},
 					};
 					this.$store.commit("SET_SONG", data);
+				} else if (Number(val) === 0) {
+					this.$store.commit("PAUSE_SONG", this.id);
 				}
 			},
 		},
