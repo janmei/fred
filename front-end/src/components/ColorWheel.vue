@@ -57,188 +57,188 @@
 </template>
 
 <script>
-export default {
-	name: "WheelPicker",
-	props: {
-		h: Number,
-		s: Number,
-		b: Number,
-	},
-	// computed: {
-	// 	bri: function() {
-	// 		return this.b;
-	// 	},
-	// },
-	data: function() {
-		return {
-			wheelSize: 150,
-			pickerSize: 10,
-			pickerTop: 65,
-			pickerLeft: 65,
-			image: {
-				// src: ,
-				style: {
-					width: "100%",
-					height: "auto",
-					"user-select": "none",
+	export default {
+		name: "WheelPicker",
+		props: {
+			h: Number,
+			s: Number,
+			b: Number,
+		},
+		// computed: {
+		// 	bri: function() {
+		// 		return this.b;
+		// 	},
+		// },
+		data: function() {
+			return {
+				wheelSize: 150,
+				pickerSize: 10,
+				pickerTop: 65,
+				pickerLeft: 65,
+				image: {
+					// src: ,
+					style: {
+						width: "100%",
+						height: "auto",
+						"user-select": "none",
+					},
 				},
-			},
-			color: {
-				hsb: {
-					h: 0,
-					s: 0,
+				color: {
+					hsb: {
+						h: 0,
+						s: 0,
+					},
 				},
-			},
-		};
-	},
-	directives: {
-		dragpicker: {
-			bind: function(element, binding) {
-				let mousemove = function(e) {
-					binding.value(e);
-					return false;
-				};
-				let mouseup = function() {
-					document.removeEventListener("mousemove", mousemove);
-					document.removeEventListener("mouseup", mouseup);
-					return false;
-				};
-				element.addEventListener("mousedown", function() {
-					document.addEventListener("mousemove", mousemove);
-					document.addEventListener("mouseup", mouseup);
-					return false;
-				});
+			};
+		},
+		directives: {
+			dragpicker: {
+				bind: function(element, binding) {
+					let mousemove = function(e) {
+						binding.value(e);
+						return false;
+					};
+					let mouseup = function() {
+						document.removeEventListener("mousemove", mousemove);
+						document.removeEventListener("mouseup", mouseup);
+						return false;
+					};
+					element.addEventListener("mousedown", function() {
+						document.addEventListener("mousemove", mousemove);
+						document.addEventListener("mouseup", mouseup);
+						return false;
+					});
+				},
 			},
 		},
-	},
-	methods: {
-		hsbHue: function(hue) {
-			hue = (hue * 180) / Math.PI; // radians to degrees
+		methods: {
+			hsbHue: function(hue) {
+				hue = (hue * 180) / Math.PI; // radians to degrees
 
-			let to, from, a, b, c, d;
+				let to, from, a, b, c, d;
 
-			from = [
-				[0, 60],
-				[60, 120],
-				[120, 240],
-				[240, 360],
-			];
-			to = [
-				[0, 120],
-				[120, 180],
-				[180, 240],
-				[240, 360],
-			];
+				from = [
+					[0, 60],
+					[60, 120],
+					[120, 240],
+					[240, 360],
+				];
+				to = [
+					[0, 120],
+					[120, 180],
+					[180, 240],
+					[240, 360],
+				];
 
-			if (hue === 360) {
-				return hue;
-			}
-
-			for (let x in to) {
-				if (hue >= to[x][0] && hue <= to[x][1]) {
-					a = to[x][0];
-					b = to[x][1];
-					c = from[x][0];
-					d = from[x][1];
+				if (hue === 360) {
+					return hue;
 				}
-			}
 
-			return c + (hue - a) * ((d - c) / (b - a));
-		},
-		clickMove: function(e) {
-			this.captureMovement(e);
-		},
-		captureMovement: function(e) {
-			let h, s;
-			let parent = this.$refs.parent;
+				for (let x in to) {
+					if (hue >= to[x][0] && hue <= to[x][1]) {
+						a = to[x][0];
+						b = to[x][1];
+						c = from[x][0];
+						d = from[x][1];
+					}
+				}
 
-			let parentWidth = parent.clientWidth;
-			// parentHeight = parent.clientHeight;
-
-			let offsetX = parent.getBoundingClientRect().left,
-				offsetY = parent.getBoundingClientRect().top;
-
-			let clientX =
-				typeof e.clientX === "undefined"
-					? e.changedTouches[0].clientX
-					: e.clientX;
-
-			let clientY =
-				typeof e.clientY === "undefined"
-					? e.changedTouches[0].clientY
-					: e.clientY;
-
-			let x = Math.round(clientX - offsetX),
-				y = Math.round(clientY - offsetY);
-
-			let maxR = parentWidth / 2;
-			let rx = maxR - x,
-				ry = maxR - y;
-
-			let r = Math.sqrt(rx * rx + ry * ry);
-			let angle = Math.atan2(ry, rx);
-
-			angle = angle < 0 ? (angle += Math.PI * 2) : angle;
-
-			if (r > maxR) {
-				r = maxR;
-				x = maxR - maxR * Math.cos(angle);
-				y = maxR - maxR * Math.sin(angle);
-			}
-
-			x = Math.round(x);
-			y = Math.round(y);
-
-			h = this.hsbHue(angle);
-			s = Math.floor((r / maxR) * 100);
-
-			this.pickerLeft = x - this.pickerSize / 2;
-			this.pickerTop = y - this.pickerSize / 2;
-
-			this.color.hsb.h = h;
-			this.color.hsb.s = s;
-
-			e.preventDefault();
-			e.stopPropagation();
-		},
-	},
-	created: function() {
-		this.$watch(
-			"color.hsb",
-			function(newValue) {
-				this.$emit("changed", newValue);
+				return c + (hue - a) * ((d - c) / (b - a));
 			},
-			{ deep: true }
-		);
-	},
-	watch: {},
-};
+			clickMove: function(e) {
+				this.captureMovement(e);
+			},
+			captureMovement: function(e) {
+				let h, s;
+				let parent = this.$refs.parent;
+
+				let parentWidth = parent.clientWidth;
+				// parentHeight = parent.clientHeight;
+
+				let offsetX = parent.getBoundingClientRect().left,
+					offsetY = parent.getBoundingClientRect().top;
+
+				let clientX =
+					typeof e.clientX === "undefined"
+						? e.changedTouches[0].clientX
+						: e.clientX;
+
+				let clientY =
+					typeof e.clientY === "undefined"
+						? e.changedTouches[0].clientY
+						: e.clientY;
+
+				let x = Math.round(clientX - offsetX),
+					y = Math.round(clientY - offsetY);
+
+				let maxR = parentWidth / 2;
+				let rx = maxR - x,
+					ry = maxR - y;
+
+				let r = Math.sqrt(rx * rx + ry * ry);
+				let angle = Math.atan2(ry, rx);
+
+				angle = angle < 0 ? (angle += Math.PI * 2) : angle;
+
+				if (r > maxR) {
+					r = maxR;
+					x = maxR - maxR * Math.cos(angle);
+					y = maxR - maxR * Math.sin(angle);
+				}
+
+				x = Math.round(x);
+				y = Math.round(y);
+
+				h = this.hsbHue(angle);
+				s = Math.floor((r / maxR) * 100);
+
+				this.pickerLeft = x - this.pickerSize / 2;
+				this.pickerTop = y - this.pickerSize / 2;
+
+				this.color.hsb.h = h;
+				this.color.hsb.s = s;
+
+				e.preventDefault();
+				e.stopPropagation();
+			},
+		},
+		created: function() {
+			this.$watch(
+				"color.hsb",
+				function(newValue) {
+					this.$emit("changed", newValue);
+				},
+				{ deep: true }
+			);
+		},
+		watch: {},
+	};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.sample {
-	width: 100%;
-	height: 140px;
-	margin: 0 auto;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	margin-top: 30px;
-}
-.sample span {
-	mix-blend-mode: difference;
-	color: orange;
-	font-size: 24px;
-}
+	.sample {
+		width: 100%;
+		height: 140px;
+		margin: 0 auto;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		margin-top: 30px;
+	}
+	.sample span {
+		mix-blend-mode: difference;
+		color: orange;
+		font-size: 24px;
+	}
 
-[for="brightness"] {
-	color: white;
-}
+	[for="brightness"] {
+		color: white;
+	}
 </style>
