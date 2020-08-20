@@ -23,15 +23,17 @@ Damit die Raspberry Pi alle zu unterscheiden sind, vergibt man nach dem ersten S
 
 Um die Funktionsweise sicherzustellen, müssen die Anforderungen zu erst auf den Raspberry Pis installiert werden:
 
-`sudo apt-get install git python3-pip python-pygame -y`
-
-`pip3 install paho-mqtt pygame`
+```
+sudo apt-get install git python3-pip python-pygame -y
+pip3 install paho-mqtt pygame
+```
 
 Lädt man das Github Repository herunter:
 
-`git clone https://github.com/janmei/fred.git`
-
-`cd fred`
+```
+git clone https://github.com/janmei/fred.git
+cd fred
+```
 
 Falls der Rechner von der bereits in `index.py` eingetragenen IP-Adresse abweicht, muss man diese mit der korrekten Angeben.
 Um das Skript zu starten gibt man ein:
