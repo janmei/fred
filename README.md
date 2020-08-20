@@ -39,3 +39,19 @@ Falls der Rechner von der bereits in `index.py` eingetragenen IP-Adresse abweich
 Um das Skript zu starten gibt man ein:
 
 `python3 index.py`
+
+## Music / Sounds
+
+Somnolent - Ambient / Calm
+
+"Uniq - Art Of Silence" is under a Creative Commons license (CC BY-NC-SA 3.0)
+
+Eclipse by Scott Buckley – www.scottbuckley.com.au
+
+MATTIA CUPELLI – https://soundcloud.com/mattiacupelli/royalty-download-free
+
+Rain and Thunder Sounds – http://www.freesoundslibrary.com
+Metro-Station – https://www.freesoundslibrary.com
+Forest – https://www.freesoundslibrary.com
+
+Solace – Liakoth
